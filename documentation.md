@@ -76,41 +76,41 @@ That's the trickiest part to decide, because there are many options. But since i
 
 K3s is lightweight which never hurts, but much more important is that it has batteries included. Sometimes you don't want this, but here it really helps to ease deployment and management in the long-term. And since it's still k8s you won't lose that much knowledge.
 
-For networking we opt for the Flannel+Tailscale integration since it provides secure remote-access and allows for global scalabity if needed. We intentionally don't deploy cilium.
+For networking we opt for the Flannel+Tailscale integration since it provides secure remote-access and allows for global scalabity if needed. We intentionally don't deploy cilium (yet ;).
 
 Tailscale is just for scalability over other providers and secure remote-access.
 
-K3s is lower in resource usage, which helps on small servers, but if we get a big one it might not play a role at all. It also looks better suited for single-node deployments, eases management and has some pretty damn good integration into tailscale.
+##### Ingress
 
-k8s on the other hand is closer to the knowledge I need, but that's about all it has to offer.
+For traffic into our cluster we have to classes:
 
-###### ingress
-internal: servicelb +traefik out of the box + wildcard dns + wildcard cert
-external: custom funnel proxy + nginx
+- private services -> the traefik ingress-controller from k3s is already setup to serve traffic on the tailnet
+- public services -> we code a custom funnel proxy that will create a tailscale funnel and proxy all traffic to another ingress controller where he's deployed as a sidecar
+	- other option: we deploy some nodes with public IPs and let servicelb (from k3s), only advertise ports on these nodes, then we can directly reach the services form the internet
 
-###### backup
-automated to s3 out of the box
+##### backup
 
-for PVs we need a solution anyway
+For k3s it's already solved, see [this doc](https://docs.k3s.io/datastore/backup-restore).
 
-###### certs
+For PVs we need a good solution, but there are options out there... For sure they should save the backups to S3 in the background.
+
+##### certs
 
 k3s creates and manages it's own CA for the cluster. This is considered the most reliable option.
 
-for admission controllers and other internal usage we maintain our own CA that can be used via Cert Manager
+for admission controllers and other internal usage we try to create a CA in Akeyless that cert-manager can use to get certificates. If this is not possible, we just create our own CA and use the CAIssuer of cert-manager.
 
-All accessible Web UIs shall use Let's Encrypt Certificates
+All accessible Web UIs shall use Let's Encrypt Certificates, this requires some sort of verification. The fastest option we have here is DNS-01 with Infomaniak (no need to switch DNS provider again).
 
-cert-manager + DNS-01 needed for infomaniak
-https://github.com/Infomaniak/cert-manager-webhook-infomaniak
+##### dns
 
-###### dns
-wildcards or if external-dns adds support for native infomaniak, we use this
+We don't switch our domains from Infomaniak to any other system, so either create wildcards, manual records or if the Infomaniak support for external-dns comes one day, we could use this.
 
-###### secrets
-we use external secrets, as it's decoupled from the backend system and easy to setup.
+##### secrets
 
-As backend akeyless Saas is currently our choice since it's free and logged in with Github
+All static secrets that are used during cluster creation should be stored in an encrypted file in the Git repo. All other secrets can be found on Akeyless SaaS Platform.
+
+[Link](https://console.akeyless.io) (Login with Github)
 
 ##### External dependencies
 - akeyless.io
@@ -120,12 +120,17 @@ As backend akeyless Saas is currently our choice since it's free and logged in w
 
 two logins needed which are both backed by DR:
 - github
-- infomaniak
+- infomaniak & infomaniak openstack
 
-### Further reading
-- https://stackoverflow.com/questions/34724160/go-http-send-incoming-http-request-to-an-other-server-using-client-do
-- https://tailscale.dev/blog/embedded-funnel
+## Naming 
 
+A word about naming: naming is hard and complex, therefore we have stupid names.
+
+Axiom is the entire cluster, because that's the big spaceship out of the disney movie WALL-E (2007).
+
+The masters / servers are nummbered with the prefix `M-O` for the very clever and observant vacuum cleaner robot.
+
+The workers / agents are nummbered with the prefix `WALL-A` for the big clunky robots that compress garbage to cubes.
 
 ## Infrastructure
 
@@ -216,13 +221,11 @@ The minimum we need is:
 - flatcar or ubuntu linux
 - ssh access (technically not really required)
 
-
 ### Storage
 
 #### Backup
 
 An s3 bucket somewhere is required to backup k3s itself. Location doesn't matter as long as it's publicly available.
-
 
 -> [02 - K3s](./02_k3s.md)
 
@@ -238,7 +241,6 @@ An s3 bucket somewhere is required to backup k3s itself. Location doesn't matter
 
 Once k3sup is installed on your nodes, get a shell somehow and start bootstraping the first server node:
 
-
 ```
 k3sup install --cluster --local --k3s-extra-args \
   '--cluster-cidr 10.127.0.0/16 
@@ -253,7 +255,81 @@ k3sup install --cluster --local --k3s-extra-args \
    '
 ```
 
+## Level of services
+
+Now that the cluster is up and running we start deploying services.
+
+The services are categorized into different cateogories that all represent an Argo CD sync wave and a priority class in K8s.
+
+We have:
+-5: node-critical service
+-4: cluster-critical service
+-3: core service
+-2: almost core service 
+-1: regular infra service 
+0: workload
+
 ## Core Services
+
+### Cert-Manager
+
+Docs: https://cert-manager.io/docs/
+
+everything shall use TLS, therefore we deploy cert-manager right now using an inital helm install command. Later on it will be managed by Argo CD.
+
+Cert-manager has an integration into akeyless.io for private CA certs and one into Infomaniak for DNS-01 challenges.
+
+#### Preparations
+
+First generate the axiom CA using this docs: https://docs.akeyless.io/docs/cli-reference-certificates#p-stylecolorbluecreate-pki-cert-issuerp (can also be created in the UI).
+
+Then add the repo:
+
+```
+helm repo add jetstack https://charts.jetstack.io
+```
+
+#### Installation
+
+```
+helm upgrade -i \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.12.x \
+	--set installCRDs=true
+```
+
+#### Configuration
+
+The issuer for akeyless:
+
+```yaml
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: akeyless-api
+data:
+  token: "cC04Y2l0eelfkjsfijlskjfklsflfskdfjlkfkzRVk9" # access_id..acces_key | base64
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: akeyless-ca
+spec:
+  vault:
+    path: "pki/sign/axiom/ca/AxiomCA"
+    server: http://api.akeyless.io
+    auth:
+      tokenSecretRef:
+          name: akeyless-api
+          key: token
+```
+
+And the issuer for infomaniak:
+
+https://github.com/Infomaniak/cert-manager-webhook-infomaniak
 
 ### External-Secrets
 
@@ -271,3 +347,11 @@ I created a folder there named `axiom`, and a new role named `axiom` which has r
 kubectl create namespace secrets
 kubectl create secret generic -n secrets akeyless-auth  --from-literal accessId="" --from-literal accessType="api_key" --from-literal accessTypeParam=""
 ```
+
+## Infra Services
+
+### Public Ingress
+
+- https://stackoverflow.com/questions/34724160/go-http-send-incoming-http-request-to-an-other-server-using-client-do
+- https://tailscale.dev/blog/embedded-funnel
+
