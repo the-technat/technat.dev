@@ -36,8 +36,8 @@ The why section said it shall be a central solution. Therefore the primary provi
 So the main things needed for this solution are:
 - an openstack project by Infomaniak
 - a github repository to store configs
-- a terraform workspace to run automation
-- an akeyless account to store secrets
+- a terraform workspace to run automation (best placed in an `axiom` project)
+- an akeyless account to store secrets (best with Github as IDP)
 
 ## Technical deep dive
 
@@ -113,9 +113,9 @@ We only use Linux for our task. Either Ubuntu or Flatcat Linux are prefered. But
 The services are categorized into different levels that all represent an Argo CD sync wave and a priority class in K8s.
 
 We have:
--5/2000001000: node-critical service
--4/2000000000: cluster-critical service
--3/1000000000: core service
--2/100000000: almost core service 
--1/10000000: regular infra service 
-0/1000000: workload
+- -5/2000001000: node-critical service
+- -4/2000000000: cluster-critical service
+- -3/1000000000: core service
+- -2/100000000: almost core service 
+- -1/10000000: regular infra service 
+- 0/1000000: workload
