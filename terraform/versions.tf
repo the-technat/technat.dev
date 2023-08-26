@@ -5,5 +5,9 @@ terraform {
       source  = "terraform-provider-openstack/openstack"
       version = "~> 1.51.1"
     }
+    tailscale = {
+      source  = "tailscale/tailscale"
+      version = "~> 0.13.9"
+    }
   }
 }

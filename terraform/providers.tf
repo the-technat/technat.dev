@@ -4,3 +4,8 @@ provider "openstack" {
   auth_url                      = "https://api.pub1.infomaniak.cloud/identity"
   region                        = "dc3-a"
 }
+
+provider "tailscale" {
+  api_key = var.tailscale_api_key
+  tailnet = "the-technat.github"
+}
