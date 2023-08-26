@@ -9,5 +9,9 @@ terraform {
       source  = "tailscale/tailscale"
       version = "~> 0.13.9"
     }
+    akeyless = {
+      version = "~> 1.3.6"
+      source  = "akeyless-community/akeyless"
+    }
   }
 }
