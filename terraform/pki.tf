@@ -3,4 +3,5 @@ resource "akeyless_dfc_key" "primary" {
   name              = "axiom/ca/primary"
   delete_protection = true
   description       = "Primary Key for Axiom CA"
+  tags              = ["axiom"]
 }
