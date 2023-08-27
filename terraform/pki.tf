@@ -14,7 +14,7 @@ resource "akeyless_dfc_key" "primary" {
 resource "akeyless_pki_cert_issuer" "primary" {
   name = "axiom/ca/primary_ca"
   description = "Root CA for axiom"
-  signer_key_name = akeyless_dfc_key.primary.name
+  signer_key_name = "/axiom/ca/primary"
   ttl = 2592000 # 30 days
   delete_protection = true
 
