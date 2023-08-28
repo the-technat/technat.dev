@@ -1,5 +1,5 @@
 locals {
-	pki_tags = ["axiom"]
+  pki_tags = ["axiom"]
 
 }
 
@@ -12,17 +12,17 @@ resource "akeyless_dfc_key" "primary" {
 }
 
 resource "akeyless_pki_cert_issuer" "primary" {
-  name = "axiom/ca/primary_ca"
-  description = "Root CA for axiom"
-  signer_key_name = "/axiom/ca/primary"
-  ttl = 2592000 # 30 days
+  name              = "axiom/ca/primary_ca"
+  description       = "Root CA for axiom"
+  signer_key_name   = "/axiom/ca/primary"
+  ttl               = 2592000 # 30 days
   delete_protection = true
 
-  allow_any_name = true
+  allow_any_name   = true
   allow_subdomains = true
-  country = "Switzerland"
-  province = "Bern" 
-  organizations = "the-technat"
+  country          = "Switzerland"
+  province         = "Bern"
+  organizations    = "the-technat"
 
   tags = local.pki_tags
 }

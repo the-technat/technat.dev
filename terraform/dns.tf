@@ -19,3 +19,8 @@ resource "tailscale_dns_nameservers" "tailnet" {
 resource "tailscale_dns_preferences" "global" {
   magic_dns = true
 }
+
+## Currently missing an option to set the DNS domain for your tailnet
+locals {
+  tailnet_domain = "crocodile-bee.ts.net"
+}
