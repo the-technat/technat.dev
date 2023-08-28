@@ -24,24 +24,6 @@ resource "openstack_compute_secgroup_v2" "axiom_default" {
   description = "default axiom security group"
 }
 
-resource "random_string" "root" {
-  length  = 30
-  special = false
-  lower   = true
-  upper   = true
-  numeric = true
-
-  lifecycle {
-    prevent_destroy = true # if this is destroyed, we essentially lose the PW for the root account
-  }
-}
-
-resource "akeyless_static_secret" "root_password" {
-  path        = "axiom/infrastrucutre/root_pw"
-  value       = random_string.root.result
-  description = "Root password for machines"
-}
-
 
 ### M-O-1 (first control-plane node)
 resource "tailscale_tailnet_key" "m-o-1" {
@@ -68,12 +50,27 @@ resource "tailscale_device_key" "m-o-1" {
   key_expiry_disabled = true
 }
 
+resource "random_string" "m-o-1" {
+  length  = 15
+  special = false
+  lower   = true
+  upper   = true
+  numeric = true
+}
+
+resource "akeyless_static_secret" "m-o-1_password" {
+  path        = "axiom/infrastrucutre/m-o-1_pw"
+  value       = random_string.m-o-1.result
+  description = "Root password for m-o-1"
+}
+
+
 resource "openstack_compute_instance_v2" "m-o-1" {
   name                = "m-o-1"
   image_id            = local.image_id
   flavor_name         = "a1-ram2-disk20-perf1"
   key_pair            = "yubikey"
-  admin_pass          = random_string.root.result
+  admin_pass          = random_string.m-o-1.result
   security_groups     = [openstack_compute_secgroup_v2.axiom_default.name]
   user_data           = local.cloud_init_data
   stop_before_destroy = true
@@ -83,7 +80,6 @@ resource "openstack_compute_instance_v2" "m-o-1" {
   }
 
   lifecycle {
-    ignore_changes  = [key_pair, admin_pass, user_data]
-    prevent_destroy = true
+    ignore_changes = [key_pair]
   }
 }
