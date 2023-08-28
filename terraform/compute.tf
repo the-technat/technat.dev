@@ -19,11 +19,6 @@ resource "openstack_compute_keypair_v2" "terraform" {
   name = "terraform"
 }
 
-resource "openstack_compute_secgroup_v2" "axiom_default" {
-  name        = "axiom_default"
-  description = "default axiom security group"
-}
-
 
 ### M-O-1 (first control-plane node)
 resource "tailscale_tailnet_key" "m-o-1" {

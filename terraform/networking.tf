@@ -20,6 +20,18 @@ resource "openstack_networking_router_interface_v2" "router_interface_1" {
   subnet_id = openstack_networking_subnet_v2.axiom.id
 }
 
+resource "openstack_compute_secgroup_v2" "axiom_default" {
+  name        = "axiom_default"
+  description = "default axiom security group"
+
+  rule {
+    from_port   = 22
+    to_port     = 22
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
+}
+
 ### Tailscale networking
 # resource "tailscale_acl" "global" {
 #   acl = jsonencode({
