@@ -1,4 +1,8 @@
 ### Openstack Networking
+locals {
+  # this network will give you a static public IP in infomaniak's network blocks
+  infomaniak_public_net = "0f9c3806-bd21-490f-918d-4a6d1c648489" # ext-floating1 
+}
 resource "openstack_networking_network_v2" "axiom" {
   name           = "axiom"
   admin_state_up = "true"
@@ -6,13 +10,20 @@ resource "openstack_networking_network_v2" "axiom" {
 
 resource "openstack_networking_router_v2" "primary" {
   name                = "primary"
-  external_network_id = "0f9c3806-bd21-490f-918d-4a6d1c648489" # ext-floating1
+  external_network_id = local.infomaniak_public_net
 }
 
 resource "openstack_networking_subnet_v2" "axiom" {
-  network_id = openstack_networking_network_v2.axiom.id
-  cidr       = "192.168.111.0/24"
-  ip_version = 4
+  name        = "a"
+  description = "no meaningful name, but a subnet is currently not bound to an AZ or so"
+  network_id  = openstack_networking_network_v2.axiom.id
+  cidr        = "192.168.111.0/24"
+  ip_version  = 4
+
+  # ns1.pub1.infomaniak.cloud && ns2.pub1.infomaniak.cloud
+  # dns_nameservers = ["185.125.25.123", "185.125.25.119"]
+
+  dns_nameservers = ["149.112.112.112", "9.9.9.9"]
 }
 
 resource "openstack_networking_router_interface_v2" "router_interface_1" {
