@@ -47,7 +47,7 @@ resource "openstack_compute_instance_v2" "m-o-1" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    # prevent_destroy = true
   }
 }
 
