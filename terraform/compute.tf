@@ -26,16 +26,20 @@ resource "openstack_compute_keypair_v2" "terraform" {
   name = "terraform"
 }
 
+resource "time_rotating" "tskey" {
+  rotation_minutes = 5
+}
 resource "tailscale_tailnet_key" "bootstrap" {
   ephemeral     = false
   reusable      = true
   preauthorized = true
-  # expiry        = 300 # 5min
-  tags = ["tag:k3s"]
+  expiry        = 300 # 5min
+  tags          = ["tag:k3s"]
 
-  # lifecycle {
   # https://github.com/tailscale/terraform-provider-tailscale/issues/144
-  # }
+  lifecycle {
+    replace_triggered_by = [time_rotating.tskey]
+  }
 }
 
 ### M-O-1 (first control-plane node)
