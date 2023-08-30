@@ -6,7 +6,14 @@ locals {
     ssh_user        = local.ssh_user
     device_auth_key = tailscale_tailnet_key.bootstrap.key
     ssh_keys        = [openstack_compute_keypair_v2.terraform.public_key, openstack_compute_keypair_v2.yubikey.public_key]
+    hashed_root_pw  = data.akeyless_static_secret.root_password.value
   })
+}
+
+data "akeyless_static_secret" "root_password" {
+  # Note: password must already be hashed for cloud-init
+  # use: openssl passwd -1 -salt SaltSalt ""
+  path = "axiom/infrastrucutre/root_hashed"
 }
 
 resource "openstack_compute_keypair_v2" "yubikey" {
@@ -24,8 +31,7 @@ resource "tailscale_tailnet_key" "bootstrap" {
   reusable      = true
   preauthorized = true
   # expiry        = 300 # 5min
-  expiry = 3600
-  tags   = ["tag:k3s"]
+  tags = ["tag:k3s"]
 
   # lifecycle {
   # https://github.com/tailscale/terraform-provider-tailscale/issues/144
@@ -37,7 +43,6 @@ resource "openstack_compute_instance_v2" "m-o-1" {
   name                = "m-o-1"
   image_id            = local.image_id
   flavor_name         = "a1-ram2-disk20-perf1"
-  admin_pass          = data.akeyless_static_secret.m-o-1_password.value
   security_groups     = [openstack_compute_secgroup_v2.axiom_default.name]
   user_data           = local.cloud_init_file
   stop_before_destroy = true
@@ -48,23 +53,18 @@ resource "openstack_compute_instance_v2" "m-o-1" {
 
   lifecycle {
     # prevent_destroy = true
-    ignore_changes = [user_data]
+    # ignore_changes = [user_data]
   }
 }
 
-data "akeyless_static_secret" "m-o-1_password" {
-  path = "axiom/infrastrucutre/m-o-1"
-}
+# data "tailscale_device" "m-o-1" {
+#   name = "m-o-1"
+# }
+# resource "tailscale_device_key" "m-o-1" {
+#   device_id           = data.tailscale_device.m-o-1.id
+#   key_expiry_disabled = true
 
-
-data "tailscale_device" "m-o-1" {
-  name = "m-o-1.crocodile-bee.ts.net."
-}
-resource "tailscale_device_key" "m-o-1" {
-  device_id           = data.tailscale_device.m-o-1.id
-  key_expiry_disabled = true
-
-  lifecycle {
-    replace_triggered_by = [openstack_compute_instance_v2.m-o-1]
-  }
-}
+#   lifecycle {
+#     replace_triggered_by = [openstack_compute_instance_v2.m-o-1]
+#   }
+# }

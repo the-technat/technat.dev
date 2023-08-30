@@ -3,11 +3,14 @@
 locale: en_US.UTF-8
 timezone: UTC
 users:
+  - name: root
+    lock_passwd: false
+    hashed_passwd: "${hashed_root_pw}"
   - name: ${ssh_user}
     groups: sudo
     sudo: ALL=(ALL) NOPASSWD:ALL # Allow any operations using sudo
-    lock_passwd: True # disable password login
     gecos: "Admin user created by Terraform"
+    lock_passwd: true
     shell: /bin/bash
     ssh_authorized_keys:
     %{ for ssh_key in ssh_keys ~}
