@@ -48,9 +48,23 @@ resource "openstack_compute_instance_v2" "m-o-1" {
 
   lifecycle {
     # prevent_destroy = true
+    ignore_changes = [user_data]
   }
 }
 
 data "akeyless_static_secret" "m-o-1_password" {
   path = "axiom/infrastrucutre/m-o-1"
+}
+
+
+data "tailscale_device" "m-o-1" {
+  name = "m-o-1.crocodile-bee.ts.net."
+}
+resource "tailscale_device_key" "m-o-1" {
+  device_id           = data.tailscale_device.m-o-1.id
+  key_expiry_disabled = true
+
+  lifecycle {
+    replace_triggered_by = [openstack_compute_instance_v2.m-o-1]
+  }
 }
