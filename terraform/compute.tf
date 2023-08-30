@@ -37,7 +37,7 @@ resource "openstack_compute_instance_v2" "m-o-1" {
   name                = "m-o-1"
   image_id            = local.image_id
   flavor_name         = "a1-ram2-disk20-perf1"
-  admin_pass          = random_string.m-o-1.result
+  admin_pass          = data.akeyless_static_secret.m-o-1_password.value
   security_groups     = [openstack_compute_secgroup_v2.axiom_default.name]
   user_data           = local.cloud_init_file
   stop_before_destroy = true
@@ -47,30 +47,10 @@ resource "openstack_compute_instance_v2" "m-o-1" {
   }
 
   lifecycle {
-    ignore_changes = [key_pair]
+    prevent_destroy = true
   }
 }
 
-resource "random_string" "m-o-1" {
-  length  = 15
-  special = false
-  lower   = true
-  upper   = true
-  numeric = true
+data "akeyless_static_secret" "m-o-1_password" {
+  path = "axiom/infrastrucutre/m-o-1"
 }
-resource "akeyless_static_secret" "m-o-1_password" {
-  path        = "axiom/infrastrucutre/m-o-1_pw"
-  value       = random_string.m-o-1.result
-  description = "Root password for m-o-1"
-}
-
-# data "tailscale_device" "m-o-1" {
-#   name     = "m-o-1.${local.tailnet_domain}"
-#   wait_for = "300s" # it could take some time until cloud-init has bootstrapped the server
-
-#   depends_on = [openstack_compute_instance_v2.m-o-1]
-# }
-# resource "tailscale_device_key" "m-o-1" {
-#   device_id           = data.tailscale_device.m-o-1.id
-#   key_expiry_disabled = true
-# }
