@@ -56,8 +56,8 @@ resource "openstack_compute_instance_v2" "m-o-1" {
   }
 
   lifecycle {
-    # prevent_destroy = true
-    # ignore_changes = [user_data]
+    prevent_destroy = true
+    ignore_changes = [user_data]
   }
 }
 
