@@ -61,14 +61,14 @@ resource "openstack_compute_instance_v2" "m-o-1" {
   }
 }
 
-# data "tailscale_device" "m-o-1" {
-#   name = "m-o-1"
-# }
-# resource "tailscale_device_key" "m-o-1" {
-#   device_id           = data.tailscale_device.m-o-1.id
-#   key_expiry_disabled = true
+data "tailscale_device" "m-o-1" {
+  name = "m-o-1.crocodile-bee.ts.net"
+}
+resource "tailscale_device_key" "m-o-1" {
+  device_id           = data.tailscale_device.m-o-1.id
+  key_expiry_disabled = true
 
-#   lifecycle {
-#     replace_triggered_by = [openstack_compute_instance_v2.m-o-1]
-#   }
-# }
+  lifecycle {
+    replace_triggered_by = [openstack_compute_instance_v2.m-o-1]
+  }
+}
