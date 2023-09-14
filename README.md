@@ -6,12 +6,11 @@ My personal Kubernetes cluster to host all my stuff
 
 As a computer scientist you tend to solve IT problems with custom solutions. Some might programm their own app, others might search for an app and host it themself. So do I. I got the following services that are hosted at some provider, sometimes maintained by me and sometimes as a Service:
 
-- cloud.technat.ch: My personal Nextcloud
+- cloud.technat.ch: My personal Nextcloud (contains a lot of storage as well)
 - office.technat.ch: Onlyoffice Documentserver used within the Nextcloud
-- vpn.technat.ch: A VPN service to secure browse the web from abroad
-- flasche.alleaffengaffen.ch: The minecraft server of my collages (I'm not a gamer but I can host servers)
-- foto.js-buchsi.ch: Lychee based photo gallery
-- fpvhub.ch & fpv-enthusiasts.ch: websites that might eventually be replatformed to static sites 
+- vpn.technat.ch: A VPN service to securly browse the web from abroad
+- flasche.alleaffengaffen.ch: The minecraft server of my colleagues (I'm not a gamer but I can host servers)
+- foto.js-buchsi.ch: [Lychee](https://lycheeorg.github.io/) based photo gallery
 - many more projects to come in the future
 
 Now I realized that they are spread over a dozent of different providers, all requiring some sort of monthly fee for their service. Although most of them have a good prive/value ratio, some apps don't. So the goal of axiom is to create a centralized place for all these services, so that we have:
@@ -57,42 +56,45 @@ The workers / agents are nummbered with the prefix `WALL-A` for the big clunky r
 
 It's not necessary to automate this solution, but we do out of two reasons:
 - reproducable in case of a desaster
-- automatic documentation 
+- automatic documentation of what has been done (not necessairly for someone to understand the thing, but for me as a reference)
 
-To automate we mainly use [Terraform](https://www.terraform.io/) or GitOps with [Argo CD](https://argo-cd.readthedocs.io/en/stable/).
+I decided against automating the Infrastructre with [Terraform](https://www.terraform.io/) after some initial tests since Terraform is limited in terms of configuring the cluster & addons and the infrastructure is only a small part of the setup that won't change often. So we use [Ansible](https://www.ansible.com/) as our main automation tool and later on GitOps with [Argo CD](https://argo-cd.readthedocs.io/en/stable/).
 
 ### DNS
 
-We use the dns zone `axiom.technat.ch` for everything related to the cluster (e.g APIs, nodes, infrastructure services...). The zone is of course registered by Infomaniak and maintained in their public cloud.
+We use the dns zone `axiom.technat.ch` for everything related to the cluster (e.g APIs, nodes, infrastructure services...). The zone is of course registered by Infomaniak and maintained in their Public Cloud with Openstack Designate. All records will be public regardless whether they contain a private or public IP.
 
-Services exposed externally may use other DNS zones.
+Services exposed externally on the cluster may of course use other DNS zones as well, but then without automation (e.g no external-dns).
 
 ### Backup
 
 The storage for all backups shall be an S3 bucket somewhere in Infomaniak.
 
-This means either an Openstack Swift container or Infomaniak Swiss Backup.
+This means either an Openstack Swift container or Infomaniak Swiss Backup solution.
 
 ### CNI
 
-To drive the pod/service networking we use [Cilium](https://cilium.io) with overlay networking.
+To drive the pod/service networking I use [Cilium](https://cilium.io) with overlay networking. This is mainly to keep my knowledge around Cilium up to date, for an easy/maintenance-free setup the built-in CNI [Flannel](https://github.com/flannel-io/flannel) would of course be much better.
+
+If for any reason we switch CNI in the future, these things are important:
+- Implementation of Network Policies and preferably also a custom implementation with more features
+- some sort of visibility into the network flow logs (either via CLI or WebUI)
+- it must be able to deal with multiple interfaces on the nodes (e.g because the nodes use `tailscale0` and not their primary interface for communication)
 
 ### Secrets
 
 There are two places for secrets:
-- either in the Terraform workspace 
-- or in akeyless
+- in an ansible-vault file if they are static and required for core functionality
+- on akeyless'es SaaS vault solution
 
-[Akeyless](https://akeyless.io) is a SaaS Solution for managing secrets and integrates well with Kubernetes.
-
-[Link](https://console.akeyless.io) (Login with Github)
+[Akeyless](https://akeyless.io) is a SaaS Solution for managing secrets and integrates well with Kubernetes. You can find the Console here: [Link](https://console.akeyless.io) (Login with Github)
 
 ### TLS
 
-Kubernetes highly depends on TLS to secure internal communication. So we need a good management of CAs. To start with there will be two CAs:
+Kubernetes highly depends on TLS to secure internal communication. So we need a good management of CAs. To start with, there will be two CAs:
 
-- the one k3s automatically generates and manages during the installation
-- an `axiom CA` we create in akeyless for everything else
+- the one k3s automatically generates and manages during the installation -> we don't touch nor export this one
+- an `axiom CA` we create in akeyless for everything else that requires TLS
 
 They have no relation to each other nor do they trust each other.
 
@@ -100,13 +102,14 @@ They have no relation to each other nor do they trust each other.
 
 Internal services must be accessible on a subdomain of `axiom.technat.ch` within the tailnet, external services may be accessible on any domain and IP.
 
-One possible solution would be a custom tailscale funnel proxy.
+One possible solution would be a custom tailscale funnel proxy, the other one would be leveraging servicelb to expose `443` and `80` on certain worker nodes which have a public IP. This would require multiple IPs for the same DNS record.
 
 ### Operating systems
 
 We only use Linux for our task. Either Ubuntu or Flatcat Linux are prefered. But in general the following three requirements are all we need:
-- console access via provider (a password is recommmended)
-- optionall SSH access via tailscale
+- console access via provider's website/portal (password saved in akeyless)
+- as few "security-group" like features as possible, we use cilim's host-firewall later on
+- optional SSH access via tailscale
 
 ### Level of services
 
