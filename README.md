@@ -7,7 +7,7 @@ My personal Kubernetes cluster to host all my stuff
 As a computer scientist you tend to solve IT problems with custom solutions. Some might programm their own app, others might search for an app and host it themself. So do I. I got the following services that are hosted at some provider, sometimes maintained by me and sometimes as a Service:
 
 - cloud.technat.ch: My personal Nextcloud (contains a lot of storage as well)
-- office.technat.ch: Onlyoffice Documentserver used within the Nextcloud
+- office.technat.ch: documentserver used within the Nextcloud
 - vpn.technat.ch: A VPN service to securly browse the web from abroad
 - flasche.alleaffengaffen.ch: The minecraft server of my colleagues (I'm not a gamer but I can host servers)
 - foto.js-buchsi.ch: [Lychee](https://lycheeorg.github.io/) based photo gallery
@@ -30,12 +30,11 @@ Before we dive into the details of the solution, let's define some hard requirem
 
 Since I'm a Kubernetes Engineer, the solution will be a Kubernetes cluster with all services beeing containerized. As Kubernetes distribution I'm using K3s as it has batteries included (which helps to reduce maintenance in my opinion) and it's lightweight, saving costly compute.
 
-The why section said it shall be a central solution. Therefore the primary provider for this solution is [Infomaniak](https://infomaniak.com), with their [Public Cloud](https://www.infomaniak.com/en/hosting/public-cloud) offering. As many components as possible shall be deployed there. But to save some money on compute, we base the cluster-networking on [Tailscale](https://tailscale.com), so that we can join some worker nodes from other locations into the cluster.
+The why section said it shall be a central solution. Therefore the primary provider for this solution is [Infomaniak](https://infomaniak.com), with their [Public Cloud](https://www.infomaniak.com/en/hosting/public-cloud) offering. As many components as possible shall be deployed there. But to save some money on compute, we base the cluster-networking on [Tailscale](https://tailscale.com), so that we can join some worker nodes from other locations into the cluster as well.
 
 So the main things needed for this solution are:
 - an openstack project by Infomaniak
-- a github repository to store configs
-- a terraform workspace to run automation (best placed in an `axiom` project)
+- a github repository to store configs and run automation via github actions
 - an akeyless account to store secrets (best with Github as IDP)
 
 ## Technical deep dive
