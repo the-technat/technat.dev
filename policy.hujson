@@ -19,14 +19,6 @@
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:control-plane": [
-			"autogroup:members",
-			"autogroup:it-admin",
-		],
-		"tag:compute-plane" [
-			"autogroup:members",
-			"autogroup:it-admin",
-		],
 	},
 	"autoApprovers": {
 		// automatically accepts the advertise-exit-node flag from nodes taged like that
