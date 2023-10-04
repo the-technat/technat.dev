@@ -107,8 +107,9 @@ One possible solution would be a custom tailscale funnel proxy, the other one wo
 
 We only use Linux for our task. Either Ubuntu or Flatcat Linux are prefered. But in general the following three requirements are all we need:
 - console access via provider's website/portal (password saved in akeyless)
+- ssh access via tailscale ssh
 - as few "security-group" like features as possible, we use cilim's host-firewall later on
-- optional SSH access via tailscale
+- networking doesn't matter as long as outgoing traffic is not blocked
 
 ### Level of services
 
