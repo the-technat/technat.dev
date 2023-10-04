@@ -72,7 +72,7 @@
 		{
 			"action": "accept",
 			"src": [
-				"autogroup:it-admin",
+				"the-technat@github",
 			],
 			"dst": [
 				"*:*",
@@ -98,7 +98,7 @@
 			// admins can ssh into axiom nodes as well (e.g the-technat in the console)
 			"action": "accept",
 			"src": [
-				"autogroup:it-admin",
+				"the-technat@github",
 			],
 			"dst": [
 				"tag:axiom",
