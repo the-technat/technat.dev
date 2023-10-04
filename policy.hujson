@@ -1,5 +1,6 @@
 {
 	"tagOwners": {
+		// tags that activate features
 		"tag:exitNode": [
 			"autogroup:members",
 			"autogroup:it-admin",
@@ -8,11 +9,21 @@
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:trusted": [
+
+		// tags that control access
+		"tag:bastion": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:k3s": [
+		"tag:axiom": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
+		"tag:control-plane": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
+		"tag:compute-plane" [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
@@ -22,15 +33,6 @@
 		"exitNode": [
 			"tag:exitNode",
 		],
-		// k3s can automatically adervise routes in these CIDRs
-		"routes": {
-			"10.227.0.0/16": [
-				"tag:k3s",
-			],
-			"10.127.0.0/16": [
-				"tag:k3s",
-			],
-		},
 	},
 	"nodeAttrs": [
 		// activates the funnel feature on nodes with that tag
@@ -54,35 +56,46 @@
 				"autogroup:internet:*",
 			],
 		},
-		// k3s can communicate with itself anyways
+		// axiom can communicate with itself anyways (flat networking model)
 		{
 			"action": "accept",
 			"src": [
-				"tag:k3s",
+				"tag:axiom",
 			],
 			"dst": [
-				"tag:k3s:*",
+				"tag:axiom:*",
 			],
 		},
 		// only this tag can access other nodes
 		{
 			"action": "accept",
 			"src": [
-				"tag:trusted",
+				"tag:bastion",
 			],
 			"dst": [
 				"*:*",
 			],
 		},
+		// admins can access everything
+		{
+			"action": "accept",
+			"src": [
+				"autogroup:it-admin",
+			],
+			"dst": [
+				"*:*",
+			],
+		}
 	],
 	"ssh": [
 		{
+			// only bastion hosts can ssh into axiom nodes (e.g WALL-E or trusted github actions)
 			"action": "accept",
 			"src": [
-				"tag:trusted",
-			], // only trusted devices can ssh into other nodes
+				"tag:bastion",
+			],
 			"dst": [
-				"tag:trusted",
+				"tag:axiom",
 			],
 			"users": [
 				"autogroup:nonroot",
@@ -90,38 +103,13 @@
 			],
 		},
 		{
+			// admins can ssh into axiom nodes as well (e.g the-technat in the console)
 			"action": "accept",
 			"src": [
-				"tag:trusted",
-			], // only trusted devices can ssh into other nodes
+				"autogroup:it-admin",
+			],
 			"dst": [
-				"tag:k3s",
-			],
-			"users": [
-				"autogroup:nonroot",
-				"root",
-			],
-		},
-		{
-			"action": "accept",
-			"src": [
-				"tag:trusted",
-			], // only trusted devices can ssh into other nodes
-			"dst": [
-				"tag:exitNode",
-			],
-			"users": [
-				"autogroup:nonroot",
-				"root",
-			],
-		},
-		{
-			"action": "accept",
-			"src": [
-				"tag:trusted",
-			], // only trusted devices can ssh into other nodes
-			"dst": [
-				"tag:funnel",
+				"tag:axiom",
 			],
 			"users": [
 				"autogroup:nonroot",
