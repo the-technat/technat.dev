@@ -15,7 +15,6 @@ jobs:
       contents: read
     steps:
     - uses: actions/checkout@v3
-      name: Fetch some static secrets
     - name: Fetch secrets from AKeyless
       id: fetch-secrets
       uses: LanceMcCarthy/akeyless-action@v3
