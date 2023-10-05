@@ -1,0 +1,19 @@
+---
+- hosts: all
+  gather_facts: yes
+  # become: yes
+  # become_user: root
+#   roles:
+#     - role: prereq
+#     - role: download
+#     - role: raspberrypi
+
+# - hosts: master
+#   become: yes
+#   roles:
+#     - role: k3s/master
+
+# - hosts: node
+#   become: yes
+#   roles:
+#     - role: k3s/node
