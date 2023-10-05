@@ -10,6 +10,16 @@
 			"autogroup:it-admin",
 		],
 
+		// tags for informational purposes
+		"tag:control-plane": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
+		"tag:compute-plane": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
+
 		// tags that control access
 		"tag:bastion": [
 			"autogroup:members",
