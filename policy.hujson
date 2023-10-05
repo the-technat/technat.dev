@@ -30,7 +30,7 @@
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:axiom_ci": [
+		"tag:axiom-ci": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
@@ -68,7 +68,7 @@
 			"action": "accept",
 			"src": [
 				"tag:axiom",
-				"tag:axiom_ci",
+				"tag:axiom-ci",
 			],
 			"dst": [
 				"tag:axiom:*",
@@ -100,7 +100,7 @@
 			// Axiom CI (github actions) can ssh into all nodes
 			"action": "accept",
 			"src": [
-				"tag:axiom_ci",
+				"tag:axiom-ci",
 			],
 			"dst": [
 				"tag:axiom",
