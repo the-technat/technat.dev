@@ -1,6 +1,7 @@
 ---
-- hosts: tag_axiom
-  gather_facts: yes
+- name: Common roles
+  hosts: tag_axiom
+  gather_facts: true
   remote_user: root
   vars:
     k3s_version: v1.28.2+k3s1
@@ -8,12 +9,14 @@
     - role: prepos
     - role: download
 
-- hosts: tag_control-plane
+- name: Control Plane
+  hosts: tag_control-plane
   remote_user: root
   # roles:
   # - role: k3s/master
 
-- hosts: tag_compute-plane
+- name: Compute Plane
+  hosts: tag_compute-plane
   remote_user: root
   # roles:
   # - role: k3s/worker
