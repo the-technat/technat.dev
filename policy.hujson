@@ -30,10 +30,6 @@
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:ssh-target": [ // controls ACL ssh access, without this tag no ACL will match
-			"autogroup:members",
-			"autogroup:it-admin",
-		],
 	},
 	"autoApprovers": {
 		// automatically accepts the advertise-exit-node flag from nodes taged like that
@@ -49,15 +45,6 @@
 			],
 			"attr": [
 				"funnel",
-			],
-		},
-		// activates the ssh feature on nodes with that tag
-		{
-			"target": [
-				"tag:ssh-target",
-			],
-			"attr": [
-				"ssh",
 			],
 		},
 	],
@@ -105,34 +92,6 @@
 	],
 	"ssh": [
 		{
-			// bastion hosts can ssh into everything (but since wildcard is not allowed we use a tag for this)
-			"action": "accept",
-			"src": [
-				"tag:bastion",
-			],
-			"dst": [
-				"tag:ssh-target",
-			],
-			"users": [
-				"autogroup:nonroot",
-				"root",
-			],
-		},
-		{
-			// admins can ssh into all nodes as well (e.g the-technat in the console)
-			"action": "accept",
-			"src": [
-				"the-technat@github",
-			],
-			"dst": [
-				"tag:ssh-target",
-			],
-			"users": [
-				"autogroup:nonroot",
-				"root",
-			],
-		},
-		{
 			// axiom nodes can freely ssh (flat networking model)
 			"action": "accept",
 			"src": [
@@ -146,5 +105,34 @@
 				"root",
 			],
 		},
+		{
+			// bastion hosts can ssh into everything (but since wildcard is not allowed we duplicate that rule for every tag)
+			"action": "accept",
+			"src": [
+				"tag:bastion",
+			],
+			"dst": [
+				"tag:axioms",
+			],
+			"users": [
+				"autogroup:nonroot",
+				"root",
+			],
+		},
+		{
+			// admins can ssh into all nodes as well (e.g the-technat in the console)
+			"action": "accept",
+			"src": [
+				"the-technat@github",
+			],
+			"dst": [
+				"tag:axiom",
+			],
+			"users": [
+				"autogroup:nonroot",
+				"root",
+			],
+		},
+	
 	],
 }
