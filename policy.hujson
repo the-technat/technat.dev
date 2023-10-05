@@ -112,7 +112,7 @@
 				"tag:bastion",
 			],
 			"dst": [
-				"tag:axioms",
+				"tag:axiom",
 			],
 			"users": [
 				"autogroup:nonroot",
