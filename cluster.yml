@@ -3,16 +3,14 @@
   gather_facts: yes
   remote_user: root
 #   roles:
-#     - role: prereq
-#     - role: download
-#     - role: raspberrypi
+#     - role: prepos
 
-# - hosts: master
-#   become: yes
-#   roles:
-#     - role: k3s/master
+- hosts: tag_control-plane
+  remote_user: root
+  # roles:
+  # - role: k3s/master
 
-# - hosts: node
-#   become: yes
-#   roles:
-#     - role: k3s/node
+- hosts: tag_compute-plane
+  remote_user: root
+  # roles:
+  # - role: k3s/worker

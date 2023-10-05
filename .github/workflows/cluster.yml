@@ -33,5 +33,4 @@ jobs:
     - name: Run ansible playbook
       run: ansible-playbook -i ansible-tailscale-inventory/ansible-tailscale-inventory.py cluster.yml
       env: 
-        # COLLECTIONS_PATH: collections/
         ANSIBLE_CONFIG: ansible.cfg

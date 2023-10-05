@@ -10,22 +10,31 @@ on:
 jobs:
   acls:
     runs-on: ubuntu-latest
-
+    permissions: 
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
+        name: Fetch some static secrets
+    - name: Fetch secrets from AKeyless
+      id: fetch-secrets
+      uses: LanceMcCarthy/akeyless-action@v3
+      with:
+        access-id: ${{ secrets.AKEYLESS_ACCESS_ID}}
+        static-secrets: '{"/axiom/general/tailscale_api_key":"TS_API_KEY","/axiom/general/tailnet":"TS_TAILNET"}'
       - name: Deploy ACL
         if: github.event_name == 'push'
         id: deploy-acl
         uses: tailscale/gitops-acl-action@v1
         with:
-          api-key: ${{ secrets.TS_API_KEY }}
-          tailnet: ${{ secrets.TS_TAILNET }}
+          api-key: ${{ env.TS_API_KEY }}
+          tailnet: ${{ env.TS_TAILNET }}
           action: apply
       - name: Test ACL
         if: github.event_name == 'pull_request'
         id: test-acl
         uses: tailscale/gitops-acl-action@v1
         with:
-          api-key: ${{ secrets.TS_API_KEY }}
-          tailnet: ${{ secrets.TS_TAILNET }}
+          api-key: ${{ env.TS_API_KEY }}
+          tailnet: ${{ env.TS_TAILNET }}
           action: test
