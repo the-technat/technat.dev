@@ -2,6 +2,9 @@ name: Linting
 
 on:
   push:
+    branches: ["*"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   ansible:
@@ -11,4 +14,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Ansible Lint
-        uses: ansible/ansible-lint@main
+        uses: ansible/ansible-lint@v6.20.3
