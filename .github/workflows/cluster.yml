@@ -7,22 +7,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
     - name: Join tailnet
       uses: tailscale/github-action@v2
       with:
         oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
         oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
         tags: tag:axiom
-    - name: List devices
-      run: tailscale status
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
         python-version: 3.12
-        cache: 'pip'
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{ env.pythonLocation }}-${{ hashFiles('requirements.txt') }}
     - name: Install pip dependencies
-      run:  pip install  -r requirements.txt 
+      run: pip install --upgrade --upgrade-strategy eager -r requirements.txt -e .
     - name: Install ansible-galaxy requirements
       run: ansible-galaxy install -r collections/requirements.yml
     - name: Run ansible playbook
