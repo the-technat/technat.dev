@@ -15,4 +15,4 @@ jobs:
         oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
         tags: tag:axiom
     - name: List devices
-      run: tailsclae status
+      run: tailscale status
