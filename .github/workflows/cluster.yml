@@ -11,11 +11,17 @@ jobs:
       with:
         submodules: true
       uses: actions/checkout@v4
+    - name: Fetch secrets from AKeyless
+      id: fetch-secrets
+      uses: LanceMcCarthy/akeyless-action@v3
+      with:
+        access-id: ${{ secrets.AKEYLESS_ACCESS_ID}}
+        static-secrets: '{"/axiom/general/tailscale_oauth_client_id":"TS_OAUTH_CLIENT_ID","/axiom/general/tailscale_oauth_secret":"TS_OAUTH_SECRET"}'
     - name: Join tailnet
       uses: tailscale/github-action@v2
       with:
-        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        oauth-client-id: ${{ env.TS_OAUTH_CLIENT_ID }}
+        oauth-secret: ${{ env.TS_OAUTH_SECRET }}
         tags: tag:axiom-ci
     - name: Setup Python
       uses: actions/setup-python@v4
