@@ -82,9 +82,9 @@ If for any reason we switch CNI in the future, these things are important:
 
 ### Secrets
 
-There are two places for secrets:
-- in an ansible-vault file if they are static and required for core functionality
-- on akeyless'es SaaS vault solution
+There is only one place for secrets: Akeyless SaaS Platform.
+
+But there might be some tokens to access akeyless in various places, if they cannot use some nicer auth method (like OAuth2)
 
 [Akeyless](https://akeyless.io) is a SaaS Solution for managing secrets and integrates well with Kubernetes. You can find the Console here: [Link](https://console.akeyless.io) (Login with Github)
 
