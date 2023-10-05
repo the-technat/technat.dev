@@ -30,6 +30,10 @@
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
+		"tag:axiom_ci": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
 	},
 	"autoApprovers": {
 		// automatically accepts the advertise-exit-node flag from nodes taged like that
@@ -64,6 +68,7 @@
 			"action": "accept",
 			"src": [
 				"tag:axiom",
+				"tag:axiom_ci",
 			],
 			"dst": [
 				"tag:axiom:*",
@@ -92,10 +97,10 @@
 	],
 	"ssh": [
 		{
-			// axiom nodes can freely ssh (flat networking model)
+			// Axiom CI (github actions) can ssh into all nodes
 			"action": "accept",
 			"src": [
-				"tag:axiom",
+				"tag:axiom_ci",
 			],
 			"dst": [
 				"tag:axiom",
