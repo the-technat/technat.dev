@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
+      with:
+        submodules: true
       uses: actions/checkout@v4
     - name: Join tailnet
       uses: tailscale/github-action@v2
@@ -15,21 +17,21 @@ jobs:
         oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
         oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
         tags: tag:axiom
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.12
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
         key: ${{ env.pythonLocation }}-${{ hashFiles('requirements.txt') }}
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.12
     - name: Install pip dependencies
       run: pip install --upgrade --upgrade-strategy eager -r requirements.txt 
     - name: Install ansible-galaxy requirements
       run: ansible-galaxy install -r collections/requirements.yml
     - name: Run ansible playbook
-      run: ansible-playbook --connection=local -i localhost, cluster.yml
+      run: ansible-playbook -i ansible-tailscale-inventory/ansible-tailscale-inventory.py cluster.yml
       env: 
         # COLLECTIONS_PATH: collections/
         ANSIBLE_CONFIG: ansible.cfg
