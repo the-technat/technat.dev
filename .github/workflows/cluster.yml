@@ -25,7 +25,7 @@ jobs:
         path: ${{ env.pythonLocation }}
         key: ${{ env.pythonLocation }}-${{ hashFiles('requirements.txt') }}
     - name: Install pip dependencies
-      run: pip install --upgrade --upgrade-strategy eager -r requirements.txt -e .
+      run: pip install --upgrade --upgrade-strategy eager -r requirements.txt 
     - name: Install ansible-galaxy requirements
       run: ansible-galaxy install -r collections/requirements.yml
     - name: Run ansible playbook
