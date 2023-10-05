@@ -1,0 +1,14 @@
+name: Linting
+
+on:
+  push:
+
+jobs:
+  ansible:
+    name: "Ansible Checks"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Ansible Lint
+        uses: ansible/ansible-lint@v6
