@@ -107,9 +107,9 @@ One possible solution would be a custom tailscale funnel proxy, the other one wo
 
 We only use Linux for our task. Currently the playbook is focused on Ubuntu 22.04, but that could change in the future. Since we don't manage Infrastructure declaritively, here are the minimal requirements you need to ensure when you provision Infrastructure:
 - console access via provider's website/portal must be possible as root (password saved in akeyless)
-- tailscale must be installed and logged in, thus enabling tailscale SSH access
-- there must be no firewall already configured on the nodes and security group on the cloud provider should allow all access in both directions
-- we don't care if your nodes has a public IPv4, IPv6 or just a private IP, as long as he can join tailscale we should be able to use it (maybe not for incoming traffic but for everything else)
+- tailscale must be installed and logged in (ssh, disabled key expiry + correct tagsa), thus enabling tailscale SSH access
+- there must be no firewall already configured on the nodes and eventual security groups on the cloud provider should allow all access in both directions
+- we don't care if nodes have a public IPv4, IPv6 or just a private IP, as long as they can join our tailnet we should be able to use it (maybe not for incoming traffic but for everything else)
 
 ### Level of services
 
