@@ -27,31 +27,6 @@ jobs:
       run: ansible-galaxy install -r collections/requirements.yml
     - name: Run ansible playbook
       run: ansible-playbook --connection=local -i localhost, cluster.yml
-
-    #     ansible:
-    # name: "Ansible Run"
-    # runs-on: ubuntu-latest
-    # needs: terraform
-    # container:
-    #   image: docker.io/cytopia/ansible:latest-tools
-    #   env:
-    #     COLLECTIONS_PATH: ansible/.collections
-    #     ANSIBLE_CONFIG: ansible/ansible.cfg
-    #     SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-    # steps:
-    #   - name: Checkout
-    #     uses: actions/checkout@v3
-    #   - name: Install pip dependencies
-    #     run: pip3 install -r ansible/requirements.txt
-    #   - name: Install ansible-galaxy dependencies
-    #     run: ansible-galaxy install -r ansible/requirements.yml
-    #   - name: Start SSH Agent
-    #     run: |
-    #       ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-    #       echo "${{secrets.SSH_KEY }}" | tr -d '\r' | ssh-add - > /dev/null
-    #   - name: Ansible Run
-    #     id: run
-    #     if: github.ref == 'refs/heads/main'
-    #     run: ansible-playbook ansible/minecraft.yml -e ansible_user=ci -e ansible_ssh_port=59245 -v
-    #     env:
-    #       HCLOUD_TOKEN: ${{secrets.HCLOUD_TOKEN}}
+      env: 
+        # COLLECTIONS_PATH: collections/
+        ANSIBLE_CONFIG: ansible.cfg
