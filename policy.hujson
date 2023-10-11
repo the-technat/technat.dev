@@ -20,6 +20,18 @@
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
+    "tag:hetzner": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
+    "tag:infomaniak": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
+    "tag:home": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
 
 		// tags that control access
 		"tag:bastion": [
@@ -31,6 +43,10 @@
 			"autogroup:it-admin",
 		],
 		"tag:axiom-ci": [
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
+    "tag:ssh-target": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
@@ -104,6 +120,20 @@
 			],
 			"dst": [
 				"tag:axiom",
+			],
+			"users": [
+				"autogroup:nonroot",
+				"root",
+			],
+		},
+    {
+			// bastion hosts can ssh into everything (but since wildcard is not allowed we duplicate that rule for every tag)
+			"action": "accept",
+			"src": [
+				"tag:bastion",
+			],
+			"dst": [
+				"tag:ssh-target",
 			],
 			"users": [
 				"autogroup:nonroot",
