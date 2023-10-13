@@ -17,23 +17,28 @@ Now I realized that they are spread over a dozent of different providers, all re
 - one fee
 - all services in one place and under my control
 - a home for new projects coming up
-- something to practice your IT knowledge
+- something to practice your IT knowledge on
 
 Before we dive into the details of the solution, let's define some hard requirements the solution must offer:
 
-- backup: we host productive services there that must have a backup
-- low maintenance effort: the inital effort might be high, but maintenance once every two months and not more is the goal
-- scalability: when we need more compute, we simple add new servers
+- backup: we host productive services there that must have some serious backup-system
+- low maintenance effort: the inital effort might be high, but maintenance once every two months or less frequent is my goal
+- scalability: when we need more compute, we simple add new servers (horizontal strategy)
 - potential for high-availbility: we don't build HA, but we also don't intentionally prevent it. As much as possible the solution should be designed so that HA is possible. Exceptions are allowed if the effort/cost is not worth it
+
+### A word about privacy
+
+If someone hosts services on there own, one of the primary goals he has might be privacy. Now you haven't read this word in my concept so far because that's not my primary focus. Of course privacy will be a lot better with self-hosted services, but it could be made better by far. Just think about Tailscale. Theoretically they could know everything what's happening. In addition data is stored on a provider, so you have to trust them that your data is secure there.
 
 ## Technical Overview
 
 Since I'm a Kubernetes Engineer, the solution will be a Kubernetes cluster with all services beeing containerized. As Kubernetes distribution I'm using K3s as it has batteries included (which helps to reduce maintenance in my opinion) and it's lightweight, saving costly compute.
 
-The why section said it shall be a central solution. Therefore the primary provider for this solution is [Infomaniak](https://infomaniak.com), with their [Public Cloud](https://www.infomaniak.com/en/hosting/public-cloud) offering. As many components as possible shall be deployed there. But to save some money on compute, we base the cluster-networking on [Tailscale](https://tailscale.com), so that we can join some worker nodes from other locations into the cluster as well.
+The why section said it shall be a central solution. This has to be understood in more of a symbolic way. It's one cluster managed with the same set of tools. But in terms of phyiscal location the cluster is spread over a good number of places. This is done to save money and spin up compute wherever it's currently cheap. To make this happen, I base the cluster-networking on [Tailscale](https://tailscale.com), so that nodes can be in any network anywhere on the world. This is a dramatic decision as it makes the network a Single-Point-Of-Failure (SPOF), which we tolerate to achieve higher goals. Currently I got nodes on [Infomaniak](https://infomaniak.com), [Hetzner](https://hetzner.de) and some at home that I had lying around.
 
-So the main things needed for this solution are:
-- an openstack project by Infomaniak
+So the main things needed for my cluster are:
+- some cloud providers
+- an openstack project by Infomaniak -> this is to host my DNS zone, could be anything else as well
 - a github repository to store configs and run automation via github actions
 - an akeyless account to store secrets (best with Github as IDP)
 
@@ -45,11 +50,11 @@ Some topics need further discussion.
 
 A word about naming: naming is hard and complex, therefore we have stupid names.
 
-Axiom is the entire cluster, because that's the big spaceship out of the disney movie WALL-E (2007).
+Axiom is the entire cluster, because that's the big spaceship out of the disney movie "WALL-E" (2007).
 
-The masters / servers are nummbered with the prefix `M-O` for the very clever and observant vacuum cleaner robot.
+The masters / servers are nummbered with the prefix `M-O` for the very clever and observant vacuum cleaner robot aboard axiom.
 
-The workers / agents are nummbered with the prefix `WALL-A` for the big clunky robots that compress garbage to cubes.
+The workers / agents are nummbered with the prefix `WALL-A` for the big clunky robots that compress garbage to cubes aboard axiom.
 
 ### Automation
 
@@ -63,6 +68,8 @@ I decided against automating the Infrastructre with [Terraform](https://www.terr
 
 We use the dns zone `axiom.technat.ch` for everything related to the cluster (e.g APIs, nodes, infrastructure services...). The zone is of course registered by Infomaniak and maintained in their Public Cloud with Openstack Designate. All records will be public regardless whether they contain a private or public IP.
 
+Due to how the zone is hosted, it can be accessed by [external-dns](https://github.com/kubernetes-sigs/external-dns) to automatically set DNS records for us.
+
 Services exposed externally on the cluster may of course use other DNS zones as well, but then without automation (e.g no external-dns).
 
 ### Backup
@@ -73,7 +80,7 @@ This means either an Openstack Swift container or Infomaniak Swiss Backup soluti
 
 ### CNI
 
-To drive the pod/service networking I use [Cilium](https://cilium.io) with overlay networking. This is mainly to keep my knowledge around Cilium up to date, for an easy/maintenance-free setup the built-in CNI [Flannel](https://github.com/flannel-io/flannel) would of course be much better.
+To drive the pod/service networking I use [Cilium](https://cilium.io) with overlay networking. This is mainly to keep my knowledge around Cilium up to date, for an easy/maintenance-free setup the built-in CNI [Flannel](https://github.com/flannel-io/flannel) would of course be better.
 
 If for any reason we switch CNI in the future, these things are important:
 - Implementation of Network Policies and preferably also a custom implementation with more features
@@ -122,3 +129,5 @@ We have:
 - -2/100000000: almost core service 
 - -1/10000000: regular infra service 
 - 0/1000000: workload
+
+
