@@ -38,7 +38,7 @@ jobs:
     - name: Install pip dependencies
       run: pip install --upgrade --upgrade-strategy eager -r requirements.txt 
     - name: Install ansible-galaxy requirements
-      run: ansible-galaxy install -r collections/requirements.yml
+      run: ansible-galaxy install -r requirements.yml
     - name: Run ansible playbook
       run: ansible-playbook -i ansible-tailscale-inventory/ansible-tailscale-inventory.py cluster.yml
       env: 
