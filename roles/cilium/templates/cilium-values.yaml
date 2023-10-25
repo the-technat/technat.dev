@@ -1,0 +1,36 @@
+# k8sServiceHost: "k3s-master.little-cloud.ts.net" # doesnt work since it also resolves to IPb6 (and k3s itself doesn't listen there currently)
+k8sServiceHost: "100.101.152.156"
+k8sServicePort: "6443"
+annotateK8sNode: true
+rolloutCiliumPods: true
+kubeProxyReplacement: "strict"
+ipam:
+  mode: "kubernetes"
+operator:
+  replicas: 1
+# devices: "tailscale0"
+
+policyEnforcementMode: always
+policyAuditMode: true
+hostFirewall:
+  enabled: true  
+
+ingressController:
+  enabled: true
+  default: true
+  loadbalancerMode: shared
+  service:
+    labels: {}
+    annotations: {}
+    type: LoadBalancer
+    # -- Configure a specific nodePort for insecure HTTP traffic on the shared LB service
+    insecureNodePort: ~
+    # -- Configure a specific nodePort for secure HTTPS traffic on the shared LB service
+    secureNodePort : ~
+    # -- Configure a specific loadBalancerClass on the shared LB service (requires Kubernetes 1.24+)
+    loadBalancerClass: ~
+    # -- Configure a specific loadBalancerIP on the shared LB service
+    loadBalancerIP : ~
+    # -- Configure if node port allocation is required for LB service
+    # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+    allocateLoadBalancerNodePorts: ~
