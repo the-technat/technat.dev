@@ -20,7 +20,7 @@ jobs:
       uses: LanceMcCarthy/akeyless-action@v3
       with:
         access-id: ${{ secrets.AKEYLESS_ACCESS_ID}}
-        static-secrets: '{"/axiom/general/tailscale_api_key":"TS_API_KEY","/axiom/general/tailnet":"TS_TAILNET"}'
+        static-secrets: '{"/axiom/actions/tailscale_api_key":"TS_API_KEY","/axiom/actions/tailnet":"TS_TAILNET"}'
     - name: Deploy ACL
       if: github.event_name == 'push'
       id: deploy-acl
