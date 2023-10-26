@@ -1,58 +1,47 @@
+// the tailnet is bound to my Github account, there's no way for someone else to join as a user
+// only devices can be joined using keys / oauth clients
+// only join devices manually that you own and that can access everything
+// for servers always join them using a key!
+// tags can only be assigned by me, so keys or oauth clients have to be created by me so that I can delegate tag assignement to them
 {
 	"tagOwners": {
-		// tags that activate features
+		// tags that activate / permit features
 		"tag:feature-exitNode": [
-			"autogroup:members",
-			"autogroup:it-admin",
+			"the-technat@github",
 		],
 		"tag:feature-funnel": [
-			"autogroup:members",
-			"autogroup:it-admin",
+			"the-technat@github",
 		],
-
 
 		// tags for ansible / informations
 		"tag:info-first-control-plane": [ // please only use this tag once for the fist control-plane node 
-			"autogroup:members",
-			"autogroup:it-admin",
+			"the-technat@github",
 		],
 		"tag:info-control-plane": [
-			"autogroup:members",
-			"autogroup:it-admin",
+			"the-technat@github",
 		],
 		"tag:info-compute-plane": [
-			"autogroup:members",
-			"autogroup:it-admin",
+			"the-technat@github",
 		],
-                "tag:info-hetzner": [
-			"autogroup:members",
-			"autogroup:it-admin",
+    "tag:info-hetzner": [
+			"the-technat@github",
 		],
-                "tag:info-infomaniak": [
-			"autogroup:members",
-			"autogroup:it-admin",
+    "tag:info-infomaniak": [
+			"the-technat@github",
 		],
-                "tag:info-home": [
-			"autogroup:members",
-			"autogroup:it-admin",
+    "tag:info-home": [
+			"the-technat@github",
 		],
 
 		// tags that control access
-		"tag:acl-bastion": [
-			"autogroup:members",
-			"autogroup:it-admin",
-		],
 		"tag:acl-axiom": [
-			"autogroup:members",
-			"autogroup:it-admin",
+			"the-technat@github",
 		],
 		"tag:acl-axiom-ci": [
-			"autogroup:members",
-			"autogroup:it-admin",
+			"the-technat@github",
 		],
-                "tag:acl-ssh-target": [
-			"autogroup:members",
-			"autogroup:it-admin",
+    "tag:acl-ssh-target": [
+			"the-technat@github",
 		],
 	},
 	"autoApprovers": {
@@ -94,17 +83,7 @@
 				"tag:acl-axiom:*",
 			],
 		},
-		// only this tag can access all nodes
-		{
-			"action": "accept",
-			"src": [
-				"tag:acl-bastion",
-			],
-			"dst": [
-				"*:*",
-			],
-		},
-		// admins can access everything
+		// me can access everything
 		{
 			"action": "accept",
 			"src": [
@@ -124,7 +103,7 @@
 			],
 			"dst": [
 				"tag:acl-axiom",
-                                "tag:acl-ssh-target",
+        "tag:acl-ssh-target",
 			],
 			"users": [
 				"autogroup:nonroot",
@@ -147,4 +126,24 @@
 		},
 	
 	],
+  "tests": [
+    {
+      // as long as it's me we can access everything
+      "src": "the-technat@github",
+      "accept": ["eve:22", "tag:acl-ssh-target:22", "tag:acl-axiom:6443"],
+      "deny": [""],
+    },
+    {
+      // a github action can't access everything but only axiom nodes
+      "src": "tag:acl-axiom-ci",
+      "accept": ["tag:acl-axiom:22", "tag:acl-axiom:6443"],
+      "deny": ["wall-e:22", "tag:acl-ssh-target"],
+    },  
+    {
+      // axiom nodes can only access other axiom nodes
+      "src": "tag:acl-axiom",
+      "accept": ["tag:acl-axiom:22", "tag:acl-axiom:6443"],
+      "deny": ["wall-e:22", "tag:acl-ssh-target", "tag:acl-axiom-ci:443"],
+    },  
+  ],
 }
