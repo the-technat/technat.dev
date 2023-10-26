@@ -1,52 +1,52 @@
 {
 	"tagOwners": {
 		// tags that activate features
-		"tag:exitNode": [
+		"tag:feature-exitNode": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:funnel": [
+		"tag:feature-funnel": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
 
 
-		// tags for informational purposes
-		"tag:control-plane": [
+		// tags for ansible / informations
+		"tag:info-control-plane": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:compute-plane": [
+		"tag:info-compute-plane": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-    "tag:hetzner": [
+                "tag:info-hetzner": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-    "tag:infomaniak": [
+                "tag:info-infomaniak": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-    "tag:home": [
+                "tag:info-home": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
 
 		// tags that control access
-		"tag:bastion": [
+		"tag:acl-bastion": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:axiom": [
+		"tag:acl-axiom": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-		"tag:axiom-ci": [
+		"tag:acl-axiom-ci": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-    "tag:ssh-target": [
+                "tag:ssh-target": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
@@ -54,14 +54,14 @@
 	"autoApprovers": {
 		// automatically accepts the advertise-exit-node flag from nodes taged like that
 		"exitNode": [
-			"tag:exitNode",
+			"tag:feature-exitNode",
 		],
 	},
 	"nodeAttrs": [
 		// activates the funnel feature on nodes with that tag
 		{
 			"target": [
-				"tag:funnel",
+				"tag:feature-funnel",
 			],
 			"attr": [
 				"funnel",
@@ -79,22 +79,22 @@
 				"autogroup:internet:*",
 			],
 		},
-		// axiom can communicate with itself anyways (flat networking model)
+		// axiom can communicate with itself (flat networking model)
 		{
 			"action": "accept",
 			"src": [
-				"tag:axiom",
-				"tag:axiom-ci",
+				"tag:acl-axiom",
+				"tag:acl-axiom-ci",
 			],
 			"dst": [
-				"tag:axiom:*",
+				"tag:acl-axiom:*",
 			],
 		},
 		// only this tag can access all nodes
 		{
 			"action": "accept",
 			"src": [
-				"tag:bastion",
+				"tag:acl-bastion",
 			],
 			"dst": [
 				"*:*",
@@ -104,7 +104,7 @@
 		{
 			"action": "accept",
 			"src": [
-				"the-technat@github",
+				"autogroup:it-admin",
 			],
 			"dst": [
 				"*:*",
@@ -116,24 +116,10 @@
 			// Axiom CI (github actions) can ssh into all nodes
 			"action": "accept",
 			"src": [
-				"tag:axiom-ci",
+				"tag:acl-axiom-ci",
 			],
 			"dst": [
-				"tag:axiom",
-			],
-			"users": [
-				"autogroup:nonroot",
-				"root",
-			],
-		},
-    {
-			// bastion hosts can ssh into everything (but since wildcard is not allowed we duplicate that rule for every tag)
-			"action": "accept",
-			"src": [
-				"tag:bastion",
-			],
-			"dst": [
-				"tag:ssh-target",
+				"tag:acl-axiom",
 			],
 			"users": [
 				"autogroup:nonroot",
@@ -141,13 +127,13 @@
 			],
 		},
 		{
-			// bastion hosts can ssh into everything (but since wildcard is not allowed we duplicate that rule for every tag)
+			// bastion hosts can ssh into everything that says it's ssh-compatible
 			"action": "accept",
 			"src": [
-				"tag:bastion",
+				"tag:acl-bastion",
 			],
 			"dst": [
-				"tag:axiom",
+				"tag:acl-ssh-target",
 			],
 			"users": [
 				"autogroup:nonroot",
@@ -155,13 +141,13 @@
 			],
 		},
 		{
-			// admins can ssh into all nodes as well (e.g the-technat in the console)
+			// admins can ssh into all nodes as well that say there ssh-compatible (e.g the-technat in the console)
 			"action": "accept",
 			"src": [
 				"the-technat@github",
 			],
 			"dst": [
-				"tag:axiom",
+				"tag:acl-ssh-target",
 			],
 			"users": [
 				"autogroup:nonroot",
