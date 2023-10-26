@@ -19,7 +19,7 @@ jobs:
       uses: LanceMcCarthy/akeyless-action@v3
       with:
         access-id: ${{ secrets.AKEYLESS_ACCESS_ID}}
-        static-secrets: '{"/axiom/general/tailscale_oauth_client_id":"TS_OAUTH_CLIENT_ID","/axiom/general/tailscale_oauth_secret":"TS_OAUTH_SECRET"}'
+        static-secrets: '{"/axiom/actions/tailscale_oauth_client_id":"TS_OAUTH_CLIENT_ID","/axiom/actions/tailscale_oauth_secret":"TS_OAUTH_SECRET"}'
     - name: Join tailnet
       uses: tailscale/github-action@v2
       with:
