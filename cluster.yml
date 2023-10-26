@@ -1,6 +1,6 @@
 ---
 - name: Common roles
-  hosts: tag_axiom
+  hosts: tag_acl_axiom
   gather_facts: true
   remote_user: root
   vars:
@@ -10,13 +10,13 @@
     - role: download
 
 - name: Control Plane
-  hosts: tag_control-plane
+  hosts: tag_acl_control-plane
   remote_user: root
   # roles:
   # - role: k3s/master
 
 - name: Compute Plane
-  hosts: tag_compute-plane
+  hosts: tag_acl_compute-plane
   remote_user: root
   # roles:
   # - role: k3s/worker
