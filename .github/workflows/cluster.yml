@@ -25,7 +25,7 @@ jobs:
       with:
         oauth-client-id: ${{ env.TS_OAUTH_CLIENT_ID }}
         oauth-secret: ${{ env.TS_OAUTH_SECRET }}
-        tags: tag:axiom-ci
+        tags: tag:acl-axiom-ci
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
