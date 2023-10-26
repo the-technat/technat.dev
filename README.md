@@ -1,19 +1,19 @@
 # [axiom](https://pixar.fandom.com/wiki/Axiom)
 
-My personal Kubernetes cluster to host all my stuff
+My personal Kubernetes cluster to host all my stuff.
 
 ## Why?
 
-As a computer scientist you tend to solve IT problems with custom solutions. Some might programm their own app, others might search for an app and host it themself. So do I. I got the following services that are hosted at some provider, sometimes maintained by me and sometimes as a Service:
+As a computer scientist you tend to solve IT problems with custom solutions. Some might programm their own app, others might search for an app and selfhost it. So do I. I got the following services that are hosted at some providers, sometimes maintained by me and sometimes as a Service:
 
-- cloud.technat.ch: My personal Nextcloud (contains a lot of storage as well)
-- office.technat.ch: documentserver used within the Nextcloud
+- cloud.technat.ch: My personal Nextcloud
+- collabora-online.fly.dev: Collabora Online Server used within the Nextcloud to edit rich-text documents
 - vpn.technat.ch: A VPN service to securly browse the web from abroad
-- flasche.alleaffengaffen.ch: The minecraft server of my colleagues (I'm not a gamer but I can host servers)
+- flasche.alleaffengaffen.ch: The minecraft server of my colleagues (I'm not a gamer, but I can host servers)
 - foto.js-buchsi.ch: [Lychee](https://lycheeorg.github.io/) based photo gallery
 - many more projects to come in the future
 
-Now I realized that they are spread over a dozent of different providers, all requiring some sort of monthly fee for their service. Although most of them have a good prive/value ratio, some apps don't. So the goal of axiom is to create a centralized place for all these services, so that we have:
+Now I realized that they are spread over a dozent of different providers, all requiring some sort of monthly fee for their service. Although most of them have a good prive/value ratio, some apps don't. So the goal of axiom is to create a "centralized" place for all these services, so that we have:
 - one fee
 - all services in one place and under my control
 - a home for new projects coming up
@@ -22,13 +22,14 @@ Now I realized that they are spread over a dozent of different providers, all re
 Before we dive into the details of the solution, let's define some hard requirements the solution must offer:
 
 - backup: we host productive services there that must have some serious backup-system
-- low maintenance effort: the inital effort might be high, but maintenance once every two months or less frequent is my goal
-- scalability: when we need more compute, we simple add new servers (horizontal strategy)
+- low maintenance effort: the inital effort might be high, but maintenance once every two months or less frequent is desirable
+- scalability: when we need more compute, we simple add new servers (horizontal scaling)
 - potential for high-availbility: we don't build HA, but we also don't intentionally prevent it. As much as possible the solution should be designed so that HA is possible. Exceptions are allowed if the effort/cost is not worth it
+- centralized: we use multiple providers to host the infrastructure for Axiom, but it's one platform and in that regards centralized
 
 ### A word about privacy
 
-If someone hosts services on there own, one of the primary goals he has might be privacy. Now you haven't read this word in my concept so far because that's not my primary focus. Of course privacy will be a lot better with self-hosted services, but it could be made better by far. Just think about Tailscale. Theoretically they could know everything what's happening. In addition data is stored on a provider, so you have to trust them that your data is secure there.
+If someone hosts services on there own, one of the primary goals he has might be privacy. Now you haven't read this word in my concept so far, because that's not my primary focus. Of course privacy will be a lot better with self-hosted services, but it could be made better by far. Just think about Tailscale. Theoretically they could know everything what's happening. In addition data (either backup or block-storage) is stored on a provider, so you have to trust them that your data is secure there.
 
 ## Technical Overview
 
