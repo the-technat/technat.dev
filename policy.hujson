@@ -12,6 +12,10 @@
 
 
 		// tags for ansible / informations
+		"tag:info-first-control-plane": [ // please only use this tag once for the fist control-plane node 
+			"autogroup:members",
+			"autogroup:it-admin",
+		],
 		"tag:info-control-plane": [
 			"autogroup:members",
 			"autogroup:it-admin",
@@ -113,13 +117,14 @@
 	],
 	"ssh": [
 		{
-			// Axiom CI (github actions) can ssh into all nodes
+			// Axiom CI (github actions) can ssh into all axiom nodes that are ssh-compatible
 			"action": "accept",
 			"src": [
 				"tag:acl-axiom-ci",
 			],
 			"dst": [
 				"tag:acl-axiom",
+                                "tag:acl-ssh-target",
 			],
 			"users": [
 				"autogroup:nonroot",
@@ -127,24 +132,10 @@
 			],
 		},
 		{
-			// bastion hosts can ssh into everything that says it's ssh-compatible
+			// admins (and their devices) can ssh into all nodes say there ssh-compatible (e.g the-technat in the console, wall-e, eve)
 			"action": "accept",
 			"src": [
-				"tag:acl-bastion",
-			],
-			"dst": [
-				"tag:acl-ssh-target",
-			],
-			"users": [
-				"autogroup:nonroot",
-				"root",
-			],
-		},
-		{
-			// admins can ssh into all nodes as well that say there ssh-compatible (e.g the-technat in the console)
-			"action": "accept",
-			"src": [
-				"the-technat@github",
+				"autogroup:it-admin",
 			],
 			"dst": [
 				"tag:acl-ssh-target",
