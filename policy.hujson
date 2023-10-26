@@ -130,20 +130,20 @@
     {
       // as long as it's me we can access everything
       "src": "the-technat@github",
-      "accept": ["eve:22", "tag:acl-ssh-target:22", "tag:acl-axiom:6443"],
+      "accept": ["tag:acl-ssh-target:22", "tag:acl-axiom:6443"],
       "deny": [""],
     },
     {
       // a github action can't access everything but only axiom nodes
       "src": "tag:acl-axiom-ci",
       "accept": ["tag:acl-axiom:22", "tag:acl-axiom:6443"],
-      "deny": ["wall-e:22", "tag:acl-ssh-target"],
+      "deny": ["tag:acl-ssh-target"],
     },  
     {
       // axiom nodes can only access other axiom nodes
       "src": "tag:acl-axiom",
       "accept": ["tag:acl-axiom:22", "tag:acl-axiom:6443"],
-      "deny": ["wall-e:22", "tag:acl-ssh-target", "tag:acl-axiom-ci:443"],
+      "deny": ["tag:acl-ssh-target", "tag:acl-axiom-ci:443"],
     },  
   ],
 }
