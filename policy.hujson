@@ -135,7 +135,7 @@
 			// admins (and their devices) can ssh into all nodes say there ssh-compatible (e.g the-technat in the console, wall-e, eve)
 			"action": "accept",
 			"src": [
-				"autogroup:it-admin",
+				"the-technat@github",
 			],
 			"dst": [
 				"tag:acl-ssh-target",
