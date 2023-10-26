@@ -108,7 +108,7 @@
 		{
 			"action": "accept",
 			"src": [
-				"autogroup:it-admin",
+			       "the-technat@github",
 			],
 			"dst": [
 				"*:*",
