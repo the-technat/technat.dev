@@ -46,7 +46,7 @@
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
-                "tag:ssh-target": [
+                "tag:acl-ssh-target": [
 			"autogroup:members",
 			"autogroup:it-admin",
 		],
