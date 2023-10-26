@@ -12,7 +12,7 @@ So ansible in workflows acts either on "tag:axiom" or "tag:control_plane" or "ta
 
 Prepares the nodes for k3s, installs k3s and makes sure the cluster is up & running (including the CNI).
 
-Current challenge: how to determine the first server node, since he needs the `--cluster-init` flag and the others don't. In addition, the other server nodes must register themself by the first one, so they need the URL of the API of the first one.
+Current challenge: how to determine the first server node, since he needs the `--cluster-init` flag and the others don't. In addition, the other server nodes must register themself by the first one, so they need the URL of the API of the first one. -> theres an info tailscale tag marking the first control plane node. 
 
 The HA thing would be done using tls-san + multiple DNS records
 
