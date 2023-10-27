@@ -109,10 +109,15 @@ One possible solution would be a custom tailscale funnel proxy, the other one wo
 ### Operating systems
 
 We only use Linux for our task. Currently the playbook is focused on Ubuntu 22.04, but that could change in the future. Since we don't manage Infrastructure declaritively, here are the minimal requirements you need to ensure when you provision Infrastructure:
-- console access via provider's website/portal must be possible as root (password saved in akeyless)
-- tailscale must be installed and logged in (ssh, disabled key expiry + correct tagsa), thus enabling tailscale SSH access
+- console access via provider's website/portal must be possible 
+- root password must not be set (`sudo passwd -dl root`) -> prevents console + ssh login using password
+- user `ansible` must exists (example: `sudo useradd -m -G sudo -s /bin/bash ansible`)
+  - password must be saved in akeyless
+  - user needs a home directory
+  - user ansible must be able to use sudo when entering his password (e.g member of `sudo` or `wheel`)
+- tailscale must be installed and logged in (ssh, disabled key expiry + correct tags), thus enabling tailscale SSH access
 - we don't care if nodes have a public IPv4, IPv6 or just a private IP, as long as they can join our tailnet we should be able to use it (maybe not for incoming traffic but for everything else)
-- if you use any firewall on your nodes or within the cloud providers network, you must ensure all egress traffic is allowed, ICMP is allowed and tcp 80/443 are open for nodes that have a public IP address (all rules for v4 and v6 if applicable)
+- if you use any firewall within the cloud providers network, you must ensure egress traffic according to [tailscale docs](https://tailscale.com/kb/1082/firewall-ports/) is allowed
 
 ### Level of services
 

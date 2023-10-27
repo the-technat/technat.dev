@@ -1,0 +1,17 @@
+---
+{{ ansible_managed | comment }}
+
+{% if ansible_hostname == "m-o-1" %}
+cluster-init: true
+{% else %}
+server: 
+token: 
+{% endif %}
+
+tls-san:
+  - "api.axiom.technat.ch"
+node-ip: {{ ansible_facts.tailscale0.ipv4.address }}
+flannel-backend: none
+disable-network-policy: true
+disable: traefik
+disable: servicelb

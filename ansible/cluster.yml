@@ -1,8 +1,10 @@
 ---
 - name: Common roles
-  hosts: tag_acl-axiom
+  hosts: tag_acl_axiom
   gather_facts: true
-  remote_user: root
+  remote_user: ansible
+  become: true
+  become_user: root
   vars:
     k3s_version: v1.28.2+k3s1
   roles:
@@ -10,13 +12,17 @@
     - role: download
 
 - name: Control Plane
-  hosts: tag_acl-control-plane
-  remote_user: root
-  # roles:
-  # - role: k3s/master
+  hosts: tag_info_control_plane
+  remote_user: ansible
+  become: true
+  become_user: root
+  roles:
+    - role: master
 
 - name: Compute Plane
-  hosts: tag_acl-compute-plane
-  remote_user: root
+  hosts: tag_info_compute_plane
+  remote_user: ansible
+  become: true
+  become_user: root
   # roles:
   # - role: k3s/worker

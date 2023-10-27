@@ -14,3 +14,6 @@ There are many Github actions in this repository that use secrets from akeyless.
 
 But for this to work, we first need to authenticate Github actions to akeyless. This is done using OAuth2 / JWT. See the docs [here](https://docs.akeyless.io/docs/github-actions-community-plugin) for how to configure this.
 
+### Ansible
+
+the integration into ansible has not yet been used

@@ -104,7 +104,6 @@
 			],
 			"users": [
 				"autogroup:nonroot",
-				"root",
 			],
 		},
 		{
@@ -118,7 +117,6 @@
 			],
 			"users": [
 				"autogroup:nonroot",
-				"root",
 			],
 		},
 	

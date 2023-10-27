@@ -5,6 +5,5 @@ argument_specs:
     options:
       k3s_version:
         type: "str"
-        required: false
-        default: v1.28.2+k3s1
+        required: true
         description: "The k3s version to install"
