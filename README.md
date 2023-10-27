@@ -52,11 +52,13 @@ The workers / agents are nummbered with the prefix `WALL-A` for the big clunky r
 
 ### Automation
 
-It's not necessary to automate this solution, but we do out of two reasons:
+It's not necessary to automate this solution and it should be carefully considered before automating a certain part.
+
+Some reasons for it are:
 - reproducable in case of a desaster
 - automatic documentation of what has been done (not necessairly for someone to understand the thing, but for me as a reference)
 
-I decided against automating the Infrastructre with [Terraform](https://www.terraform.io/) after some initial tests since Terraform is limited in terms of configuring the cluster & addons and the infrastructure is only a small part of the setup that won't change often. So we use [Ansible](https://www.ansible.com/) as our main automation tool and later on GitOps with [Argo CD](https://argo-cd.readthedocs.io/en/stable/).
+But since you can write markdown and a deasaster keeps a desaster thsoe arguments are quickly made nothing. Our current plan is to automate the cluster deployment + addons with Ansible, but let's see how it goes.
 
 ### DNS
 
