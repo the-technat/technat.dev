@@ -14,6 +14,11 @@ jobs:
       with:
         submodules: true
       uses: actions/checkout@v4
+    - name: Setup akeyless-cli
+      run: |
+        curl -o akeyless https://akeyless-cli.s3.us-east-2.amazonaws.com/cli/latest/production/cli-linux-amd64
+        sudo install -m 555 /usr/local/bin/akeyless
+        rm akeyless
     - name: Fetch secrets from AKeyless
       id: fetch-secrets
       uses: LanceMcCarthy/akeyless-action@v3
@@ -42,7 +47,7 @@ jobs:
     - name: Generate akeyless token
       run: VAULT_TOKEN=$(akeyless auth --access-id "${{ secrets.AKEYLESS_ACCESS_ID }}" --access-type="jwt" --jwt ${{ secrets.GITHUB_TOKEN }} --json true | jq '.token' | tr -d "\"" | tee ~/.vault-token)
     - name: Run ansible playbook
-      run: ansible-playbook -i ansible-tailscale-inventory/ansible-tailscale-inventory.py ansible/cluster.yml
+      run: ansible-playbook -i ansible/ansible-tailscale-inventory/ansible-tailscale-inventory.py ansible/cluster.yml
       env: 
         ANSIBLE_CONFIG: ansible/ansible.cfg
         VAULT_ADDR: https://hvp.akeyless.io
