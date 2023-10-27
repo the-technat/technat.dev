@@ -17,7 +17,7 @@ jobs:
     - name: Setup akeyless-cli
       run: |
         curl -o akeyless https://akeyless-cli.s3.us-east-2.amazonaws.com/cli/latest/production/cli-linux-amd64
-        sudo install -m 555 /usr/local/bin/akeyless
+        sudo install -m 555 akeyless /usr/local/bin/akeyless
         rm akeyless
     - name: Fetch secrets from AKeyless
       id: fetch-secrets
