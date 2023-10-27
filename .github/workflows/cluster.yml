@@ -19,6 +19,8 @@ jobs:
         curl -o akeyless https://akeyless-cli.s3.us-east-2.amazonaws.com/cli/latest/production/cli-linux-amd64
         sudo install -m 555 akeyless /usr/local/bin/akeyless
         rm akeyless
+        mkdir $HOME/.akeyless
+        akeyless --version
     - name: Fetch secrets from AKeyless
       id: fetch-secrets
       uses: LanceMcCarthy/akeyless-action@v3
@@ -46,7 +48,7 @@ jobs:
       run: ansible-galaxy install -r ansible/requirements.yml
     - name: Generate akeyless token
       run: |
-        akeyless configure --profile default --access-id ${{ secrets.AKEYLESS_ACCESS_ID}} --access-type=jwt  --jwt="${{ secrets.GITHUB_TOKEN }}"
+        akeyless configure --profile default --access-id ${{ secrets.AKEYLESS_ACCESS_ID}} --access-type=jwt --jwt="${{ secrets.GITHUB_TOKEN }}"
         akeyless auth --json true --profile default | jq '.token' | tr -d "\"" > ~/.vault-token
     - name: Run ansible playbook
       run: ansible-playbook -i ansible/ansible-tailscale-inventory/ansible-tailscale-inventory.py ansible/cluster.yml
