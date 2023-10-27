@@ -45,7 +45,7 @@ jobs:
     - name: Install ansible-galaxy requirements
       run: ansible-galaxy install -r ansible/requirements.yml
     - name: Generate akeyless token
-      run: VAULT_TOKEN=$(akeyless auth --access-id "${{ secrets.AKEYLESS_ACCESS_ID }}" --access-type="jwt" --jwt ${{ secrets.GITHUB_TOKEN }} --json true | jq '.token' | tr -d "\"" | tee ~/.vault-token)
+      run: akeyless auth --access-id "${{ secrets.AKEYLESS_ACCESS_ID }}" --access-type="jwt" --jwt ${{ secrets.GITHUB_TOKEN }} --json true | tee ~/.vault-token
     - name: Run ansible playbook
       run: ansible-playbook -i ansible/ansible-tailscale-inventory/ansible-tailscale-inventory.py ansible/cluster.yml
       env: 
