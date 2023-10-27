@@ -2,6 +2,8 @@ name: Linting
 
 on:
   push:
+    paths:
+    - 'ansible/**'
     branches: ["main"]
   pull_request:
     branches: ["main"]
