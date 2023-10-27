@@ -20,7 +20,7 @@ jobs:
         sudo install -m 555 akeyless /usr/local/bin/akeyless
         rm akeyless
         mkdir $HOME/.akeyless
-        akeyless --version
+        akeyless --init
     - name: Fetch secrets from AKeyless
       id: fetch-secrets
       uses: LanceMcCarthy/akeyless-action@v3
