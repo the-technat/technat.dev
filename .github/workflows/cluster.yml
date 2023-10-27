@@ -39,7 +39,10 @@ jobs:
       run: pip install --upgrade --upgrade-strategy eager -r ansible/requirements.txt 
     - name: Install ansible-galaxy requirements
       run: ansible-galaxy install -r ansible/requirements.yml
+    - name: Generate akeyless token
+      run: VAULT_TOKEN=$(akeyless auth --access-id "${{ secrets.AKEYLESS_ACCESS_ID }}" --access-type="jwt" --jwt ${{ secrets.GITHUB_TOKEN }} --json true | jq '.token' | tr -d "\"" | tee ~/.vault-token)
     - name: Run ansible playbook
       run: ansible-playbook -i ansible-tailscale-inventory/ansible-tailscale-inventory.py ansible/cluster.yml
       env: 
         ANSIBLE_CONFIG: ansible/ansible.cfg
+        VAULT_ADDR: https://hvp.akeyless.io

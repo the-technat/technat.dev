@@ -21,8 +21,6 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies.
         run: pip3 install -r ansible/requirements.txt
-      - name: Install ansible-lint
-        run: pip3 install ansible-lint
       - name: Cache dependencies
         uses: actions/cache@v3
         with:

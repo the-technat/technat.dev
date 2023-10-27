@@ -3,10 +3,10 @@
   hosts: tag_acl_axiom
   gather_facts: true
   remote_user: ansible
-  become: true
-  become_user: root
+  become: true # become_user=root is the default
   vars:
     k3s_version: v1.28.2+k3s1
+    ansible_become_pass: "{{ lookup('hashi_vault', 'secret=secret/axiom/infrastructure/ansible_user' ).values() | first}}"
   roles:
     - role: prepos
     - role: download
@@ -14,15 +14,18 @@
 - name: Control Plane
   hosts: tag_info_control_plane
   remote_user: ansible
-  become: true
-  become_user: root
+  become: true # become_user=root is the default
+  vars: 
+    ansible_become_pass: "{{ lookup('hashi_vault', 'secret=secret/axiom/infrastructure/ansible_user' ).values() | first}}"
   roles:
     - role: master
 
 - name: Compute Plane
   hosts: tag_info_compute_plane
   remote_user: ansible
-  become: true
-  become_user: root
+  become: true # become_user=root is the default
+  vars: 
+    ansible_become_pass: "{{ lookup('hashi_vault', 'secret=secret/axiom/infrastructure/ansible_user' ).values() | first}}"
+
   # roles:
   # - role: k3s/worker

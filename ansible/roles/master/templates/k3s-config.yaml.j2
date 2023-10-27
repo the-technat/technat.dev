@@ -4,8 +4,7 @@
 {% if ansible_hostname == "m-o-1" %}
 cluster-init: true
 {% else %}
-server: 
-token: 
+server: {{ hostvars['m-o-1']['ansible_tailscale0']['ipv4']['address'] }}
 {% endif %}
 
 tls-san:
