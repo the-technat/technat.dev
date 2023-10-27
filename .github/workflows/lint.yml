@@ -18,13 +18,13 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install dependencies.
-        run: pip3 install -r requirements.txt
+        run: pip3 install -r ansible/requirements.txt
       - name: Install ansible-lint
         run: pip3 install ansible-lint
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{ env.pythonLocation }}-${{ hashFiles('test-requirements.txt') }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles('ansible/requirements.txt') }}
       - name: Run ansible-lint.
-        run: ansible-lint
+        run: ansible-lint -c ansible/.ansible-lint

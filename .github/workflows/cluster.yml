@@ -34,12 +34,12 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{ env.pythonLocation }}-${{ hashFiles('requirements.txt') }}
+        key: ${{ env.pythonLocation }}-${{ hashFiles('ansible/requirements.txt') }}
     - name: Install pip dependencies
-      run: pip install --upgrade --upgrade-strategy eager -r requirements.txt 
+      run: pip install --upgrade --upgrade-strategy eager -r ansible/requirements.txt 
     - name: Install ansible-galaxy requirements
-      run: ansible-galaxy install -r requirements.yml
+      run: ansible-galaxy install -r ansible/requirements.yml
     - name: Run ansible playbook
-      run: ansible-playbook -i ansible-tailscale-inventory/ansible-tailscale-inventory.py cluster.yml
+      run: ansible-playbook -i ansible-tailscale-inventory/ansible-tailscale-inventory.py ansible/cluster.yml
       env: 
-        ANSIBLE_CONFIG: ansible.cfg
+        ANSIBLE_CONFIG: ansible/ansible.cfg
