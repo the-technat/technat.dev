@@ -1,2 +1,4 @@
 vault_pass
 .vscode
+**.env
+**terraform**
