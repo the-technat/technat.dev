@@ -14,9 +14,6 @@
 		],
 
 		// tags for ansible / informations
-		"tag:info-first-control-plane": [ // please only use this tag once for the fist control-plane node 
-			"the-technat@github",
-		],
 		"tag:info-control-plane": [
 			"the-technat@github",
 		],
