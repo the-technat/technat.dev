@@ -25,7 +25,6 @@ Before we dive into the details of the solution, let's define some hard requirem
 - low maintenance effort: the inital effort might be high, but maintenance once every two months or less frequent is desirable
 - scalability: when we need more compute, we simple add new servers (horizontal scaling)
 - potential for high-availbility: we don't build HA, but we also don't intentionally prevent it. As much as possible the solution should be designed so that HA is possible. Exceptions are allowed if the effort/cost is not worth it
-- centralized: we use multiple providers to host the infrastructure for Axiom, but it's one platform and in that regards centralized
 
 ### A word about privacy
 
@@ -35,13 +34,7 @@ If someone hosts services on there own, one of the primary goals he has might be
 
 Since I'm a Kubernetes Engineer, the solution will be a Kubernetes cluster with all services beeing containerized. As Kubernetes distribution I'm using K3s as it has batteries included (which helps to reduce maintenance in my opinion) and it's lightweight, saving costly compute.
 
-The why section said it shall be a central solution. This has to be understood in more of a symbolic way. It's one cluster managed with the same set of tools. But in terms of phyiscal location the cluster is spread over a good number of places. This is done to save money and spin up compute wherever it's currently cheap. To make this happen, I base the cluster-networking on [Tailscale](https://tailscale.com), so that nodes can be in any network anywhere on the world. This is a dramatic decision as it makes the network a Single-Point-Of-Failure (SPOF), which we tolerate to achieve higher goals. Currently I got nodes on [Infomaniak](https://infomaniak.com), [Hetzner](https://hetzner.de) and some at home that I had lying around.
-
-So the main things needed for my cluster are:
-- some cloud providers
-- an openstack project by Infomaniak -> this is to host my DNS zone, could be anything else as well
-- a github repository to store configs and run automation via github actions
-- an akeyless account to store secrets (best with Github as IDP)
+The why section said it shall be a central solution. This has to be understood in more of a symbolic way. It's one cluster managed with the same set of tools. But in terms of phyiscal location the cluster is spread over a good number of places. This is done to save money and spin up compute wherever it's currently cheap. To make this happen, I base the cluster-networking on [Tailscale](https://tailscale.com), so that nodes can be in any network anywhere on the world. This is a dramatic decision as it makes the network a Single-Point-Of-Failure (SPOF), which we tolerate to achieve higher goals. Currently I got nodes on [Infomaniak](https://infomaniak.com), [Hetzner](https://hetzner.de) and some at home.
 
 ## Technical deep dive
 
