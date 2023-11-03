@@ -4,7 +4,9 @@ on:
   push:
     paths:
     - 'ansible/**'
-    branches: ["main"]
+    branches: 
+    - "**"
+    - "!main"
   pull_request:
     branches: ["main"]
 
