@@ -10,12 +10,12 @@
   ansible.builtin.file:
     path: /etc/rancher/k3s
     state: directory
-    mode: '0750'
-- name: Create/update config.yaml 
+    mode: "0750"
+- name: Create/update config.yaml
   ansible.builtin.template:
     src: k3s-config.yaml.j2
     dest: /etc/rancher/k3s/config.yaml
-    mode: '0750'
+    mode: "0750"
 # # It's not declarative to do it that way, but the script is already well tested and os-agnostic
 - name: Download k3s-script
   ansible.builtin.get_url:
@@ -24,9 +24,9 @@
     dest: /root/k3s.sh
     owner: root
     group: root
-    mode: '0750'
+    mode: "0750"
 - name: Install k3s
-  ansible.builtin.shell: /tmp/k3s.sh server --token "{{ lookup('hashi_vault', 'secret=secret/axiom/cluster/k3s-token' ).values() | first}}"
+  ansible.builtin.shell: /tmp/k3s.sh server --token "{{ lookup('hashi_vault', 'secret=secret/axiom/cluster/k3s-token').values() | first }}"
   register: k3s_installation
   when: ansible_facts.services['k3s.service'].status == "not-found"
 # - name: K3s_install_master | restart K3s service
