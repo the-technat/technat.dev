@@ -10,7 +10,7 @@ server: {{ hostvars['m-o-1']['ansible_tailscale0']['ipv4']['address'] }}
 tls-san:
   - "api.axiom.technat.ch"
 node-ip: {{ ansible_facts.tailscale0.ipv4.address }}
+node-external-ip: 
 flannel-backend: none
 disable-network-policy: true
 disable: traefik
-disable: servicelb
