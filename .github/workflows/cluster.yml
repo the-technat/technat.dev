@@ -26,7 +26,7 @@ jobs:
       uses: LanceMcCarthy/akeyless-action@v3
       with:
         access-id: ${{ secrets.AKEYLESS_ACCESS_ID}}
-        static-secrets: '{"/axiom/actions/tailscale_oauth_client_id":"TS_OAUTH_CLIENT_ID","/axiom/actions/tailscale_oauth_secret":"TS_OAUTH_SECRET"}'
+        static-secrets: '{"/axiom/actions/tailscale_oauth_client_id":"TS_OAUTH_CLIENT_ID","/axiom/actions/tailscale_oauth_secret":"TS_OAUTH_SECRET","/axiom/actions/ansible_api_key":"AKEYLESS_ANSIBLE_API_KEY", "/axiom/actions/ansible_access_id": "AKEYLESS_ANSIBLE_ACCESS_ID"}'
     - name: Join tailnet
       uses: tailscale/github-action@v2
       with:
@@ -48,7 +48,7 @@ jobs:
       run: ansible-galaxy install -r ansible/requirements.yml
     - name: Generate akeyless token
       run: |
-        akeyless auth --access-type jwt --access-id ${{ secrets.AKEYLESS_ACCESS_ID }} --jwt ${{ secrets.GITHUB_TOKEN}} --json true | jq '.token' | tr -d "\"" > ~/.vault-token
+        akeyless auth --access-type access_key --access-id ${{ env.AKEYLESS_ANSIBLE_ACCESS_ID }} --access-key ${{ env.AKEYLESS_ANSIBLE_API_KEY }} --json true | jq '.token' | tr -d "\"" > ~/.vault-token
     - name: Run ansible playbook
       run: ansible-playbook -i ansible/ansible-tailscale-inventory/ansible-tailscale-inventory.py ansible/cluster.yml
       env: 

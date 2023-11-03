@@ -18,4 +18,5 @@ But for this to work, we first need to authenticate Github actions to akeyless. 
 
 Ansible was integrated using [these docs](https://docs.akeyless.io/docs/ansible-plugin-secret-fetch-via-playbook-using-ansible-playbook-cli).
 
-A token is generated on-the-fly within github actions, so ansible in theory inherits the permissions that the Github action already has.
+The Auth method is `api_token`. The api_token is fetched using the Github actions integration. 
+
