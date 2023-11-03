@@ -3,6 +3,8 @@ name: Sync Tailscale ACLs
 on:
   workflow_dispatch:
   push:
+    paths:
+    - 'policy.hujson'
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
