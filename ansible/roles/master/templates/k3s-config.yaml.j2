@@ -1,15 +1,15 @@
 ---
 {{ ansible_managed | comment }}
 
-{% if ansible_hostname == "m-o-1" %}
+{% if ansible_hostname == {{ init_node }} %}
 cluster-init: true
 {% else %}
-server: {{ hostvars['m-o-1']['ansible_tailscale0']['ipv4']['address'] }}
+server: {{ hostvars['{{ init_node }}']['ansible_tailscale0']['ipv4']['address'] }}
 {% endif %}
 
 tls-san:
   - "api.axiom.technat.ch"
-node-ip: {{ ansible_facts.tailscale0.ipv4.address }}
+node-ip: {{ ansible_facts.eth0.ipv4.address }}
 node-external-ip: 
 flannel-backend: none
 disable-network-policy: true

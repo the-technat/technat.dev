@@ -17,6 +17,8 @@
   become: true # become_user=root is the default
   vars:
     ansible_become_pass: "{{ lookup('hashi_vault', 'secret=secret/axiom/infrastructure/ansible_user' ).values() | first}}"
+    k3s_token: "{{ lookup('hashi_vault', 'secret=config-secrets/axiom/infrastructure/ansible_user:data')['key'] }}"
+    init_node: "m-o-1"
   roles:
     - role: master
 

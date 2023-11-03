@@ -1,7 +1,4 @@
 ---
-- name: Grab information about services
-  ansible.builtin.service_facts:
-  changed_when: false
 - name: Display all variables/facts known for a host
   ansible.builtin.debug:
     var: ansible_facts
@@ -26,9 +23,11 @@
     group: root
     mode: "0750"
 - name: Install k3s
-  ansible.builtin.shell: /tmp/k3s.sh server --token "{{ lookup('hashi_vault', 'secret=secret/axiom/cluster/k3s-token').values() | first }}"
-  register: k3s_installation
-  when: ansible_facts.services['k3s.service'].status == "not-found"
+  ansible.builtin.shell:
+    cmd: /tmp/k3s.sh server --token "{{ k3s_token }}"
+    creates: "{{ systemd_dir }}/k3s.service"
+  no_log: True
+  register: k3s_installation_output
 # - name: K3s_install_master | restart K3s service
 #   ansible.builtin.systemd:
 #     name: k3s

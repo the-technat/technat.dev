@@ -1,0 +1,17 @@
+---
+argument_specs:
+  main:
+    short_description: The main entry point for the download role.
+    options:
+      k3s_Token:
+        type: "str"
+        required: true
+        description: "The k3s token"
+      systemd_dir:
+        type: "str"
+        default: "/etc/systemd/system"
+        description: "Directory where systemd units are placed in"
+      init_node:
+        type: "str"
+        required: true
+        description: "The control-plane node that is used to initalize the cluster"
