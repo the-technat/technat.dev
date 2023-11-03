@@ -22,18 +22,21 @@
     owner: root
     group: root
     mode: "0750"
+  register: k3s_config
 - name: Install k3s
-  ansible.builtin.shell:
-    cmd: /tmp/k3s.sh server --token "{{ k3s_token }}"
+  ansible.builtin.command:
+    argv:
+      - /tmp/k3s.sh
+      - server
+      - --token {{ k3s_token }}
     creates: "{{ systemd_dir }}/k3s.service"
-  no_log: True
+  no_log: true
   register: k3s_installation_output
-# - name: K3s_install_master | restart K3s service
-#   ansible.builtin.systemd:
-#     name: k3s
-#     state: restarted
-#   when: not ansible_check_mode
-# - name: K3s_install_master | replace IP of the master node in config file
-#   ansible.builtin.command: kubectl config set-cluster default --server=https://{{ hostvars['k3s-master1'].ansible_host }}:6443
-#   register: change_ip
-#   changed_when: change_ip.rc != 0
+  when: not ansible_check_mode
+- name: Restart k3s service (for changes to take effect)
+  ansible.builtin.systemd:
+    name: k3s
+    state: restarted
+  when:
+    - not ansible_check_mode
+    - k3s_config.changed

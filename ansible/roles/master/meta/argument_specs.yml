@@ -3,7 +3,11 @@ argument_specs:
   main:
     short_description: The main entry point for the download role.
     options:
-      k3s_Token:
+      k8s_api_hostname:
+        type: "str"
+        required: true
+        description: "The hostname where the Kubernetes API will be exposed"
+      k3s_token:
         type: "str"
         required: true
         description: "The k3s token"
