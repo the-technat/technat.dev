@@ -6,7 +6,7 @@ metadata:
   namespace: cert-manager
 spec:
   vault:
-    path: /axiom/ca/primary_ca
+    path: /pki/sign/axiom/ca/primary_ca
     server: https://hvp.akeyless.io
     auth:
       appRole:

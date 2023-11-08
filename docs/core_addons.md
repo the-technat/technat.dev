@@ -28,7 +28,7 @@ kubectl create namespace cert-manager
 kubectl label ns cert-manager axiom.technat.ch/infrastructure="true" 
 kubectl create secret generic akeyless-creds --from-literal  secretId=<access_key> --from-literal accessId=<access_id> -n cert-manager
 helm repo add jetstack https://charts.jetstack.io
-helm upgrade -i cert-manager -n cert-manager jetstack/cert-manager -f values/inital-cert-manager-values.yaml
+helm upgrade -i cert-manager -n cert-manager jetstack/cert-manager -f values/initial-cert-manager-values.yaml
 kubectl apply -f values/initial-pki-issuer.yaml
 ```
 
