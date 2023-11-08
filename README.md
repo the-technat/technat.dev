@@ -58,7 +58,13 @@ Some reasons for it are:
 - reproducable in case of a desaster
 - automatic documentation of what has been done (not necessairly for someone to understand the thing, but for me as a reference)
 
-But since you can write markdown and a deasaster keeps a desaster thsoe arguments are quickly made nothing. Our current plan is to automate the cluster deployment + addons with Ansible, but let's see how it goes.
+Some reasons against it are:
+- takes way more time to automate stuff so that it actually works automated
+- you will always have some manual work you can't automate
+- automating something for only a single environment doesn't really make sense
+- the potential for failures is much higher if you automate stuff
+
+For me the negative sides are more than the positive sides and after some inital trials with [Terraform](https://terraform.com) and [Ansible](https://ansible.com) I decided against automating any of the Infrastructure/Cluster side of things. The only thing I will use is GitOps and self-managed components once the cluster is more or less working.
 
 ### DNS
 
@@ -104,20 +110,30 @@ They have no relation to each other nor do they trust each other.
 
 Internal services must be accessible on a subdomain of `axiom.technat.ch` within the tailnet, external services may be accessible on any domain and IP.
 
-One possible solution would be a custom tailscale funnel proxy, the other one would be leveraging servicelb to expose `443` and `80` on certain worker nodes which have a public IP. This would require multiple IPs for the same DNS record.
+Since our networking model is a bit complex, we rely on [servicelb](https://docs.k3s.io/networking#service-load-balancer) to implement LoadBalancer functionality. It comes builtin with K3s and does the job without requiring any additional infrastructure.
+
+We define the following labels for use with the servicelb:
+
+- `svccontroller.k3s.cattle.io/enablelb=true`: All worker nodes contain this label
+- `svccontroller.k3s.cattle.io/lbpool=internal`: All worker nodes contain this label 
+- `svccontroller.k3s.cattle.io/lbpool=external`: All worker nodes that advertise a public IP (e.g the `ExternalIP` field is populated correctly) contain this label
+
+The labels must be applied manually after joining a new node. 
+
+There are no special concepts/ideas about Ingress/Gateway API implementations. The easiest will be to use Cilium for that job, but any other Ingress Controller will do the job as well. Separation of external and internal traffic on two different Ingress Controllers is currently not required.
 
 ### Operating systems
 
-We only use Linux for our task. Currently the playbook is focused on Ubuntu 22.04, but that could change in the future. Since we don't manage Infrastructure declaritively, here are the minimal requirements you need to ensure when you provision Infrastructure:
+We only use Linux for our task. Currently the focus is on Ubuntu 22.04, but that could change in the future. Since we don't manage Infrastructure declaritively, here are the minimal requirements you need to ensure when you provision Infrastructure:
 - console access via provider's website/portal must be possible 
 - root password must not be set (`sudo passwd -dl root`) -> prevents console + ssh login using password
 - user `ansible` must exists (example: `sudo useradd -m -G sudo -s /bin/bash ansible`)
-  - password must be saved in akeyless
+  - password must be saved in akeyless 
   - user needs a home directory
   - user ansible must be able to use sudo when entering his password (e.g member of `sudo` or `wheel`)
 - tailscale must be installed and logged in (ssh, disabled key expiry + correct tags), thus enabling tailscale SSH access
 - we don't care if nodes have a public IPv4, IPv6 or just a private IP, as long as they can join our tailnet we should be able to use it (maybe not for incoming traffic but for everything else)
-- if you use any firewall within the cloud providers network, you must ensure egress traffic according to [tailscale docs](https://tailscale.com/kb/1082/firewall-ports/) is allowed
+- if you use any firewall within the cloud providers network, you must ensure egress traffic according to [tailscale docs](https://tailscale.com/kb/1082/firewall-ports/) is allowed, the wider they are open the better (we will use Cilium's host firewall later)
 
 ### Level of services
 
