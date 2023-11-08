@@ -27,5 +27,3 @@ sudo k3s etcd-snapshot save
 ```
 
 On more informations about how to restore the cluster with these snapshots, see [this page](https://docs.k3s.io/cli/etcd-snapshot#options).
-
-# Restore
