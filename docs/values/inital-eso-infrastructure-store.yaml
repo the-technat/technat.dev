@@ -9,14 +9,18 @@ spec:
       authSecretRef:
         secretRef:
           accessID:
-            name: akeyless-secret-creds
+            name: akeyless-infrastructure-creds
             key: accessId
             namespace: external-secrets
           accessType:
-            name: akeyless-secret-creds
+            name: akeyless-infrastructure-creds
             key: accessType
             namespace: external-secrets
           accessTypeParam:
-            name: akeyless-secret-creds
+            name: akeyless-infrastructure-creds
             key: accessTypeParam
             namespace: external-secrets
+  conditions:
+  - namespaceSelector:
+      matchLabels:
+        axiom.technat.ch/infrastructure: "true"

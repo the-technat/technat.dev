@@ -11,7 +11,7 @@ In order to deploy him, we first need to create an api_key and role in akeyless.
 ```
 helm repo add external-secrets https://charts.external-secrets.io
 helm upgrade -i eso external-secrets/external-secrets --create-namespace -n external-secrets -f values/inital-eso-values.yaml
-kubectl create secret generic  akeyless-secret-creds -n external-secrets --from-literal accessType="api_key" --from-literal accessId="<access_id>"  --from-literal accessTypeParam="<api_key>"
+kubectl create secret generic  akeyless-infrastructure-creds -n external-secrets --from-literal accessType="api_key" --from-literal accessId="<access_id>"  --from-literal accessTypeParam="<api_key>"
 kubectl apply -f values/inital-eso-configs.yaml
 ```
 
