@@ -14,6 +14,7 @@ curl -sfL https://get.k3s.io | sh -s - \
 --cluster-init \
 --node-ip $(tailscale ip -4) \
 --node-external-ip 195.15.252.166 \
+--advertise-address $(tailscale ip -4) \
 --tls-san=api.axiom.technat.ch \
 --disable=traefik \
 --disable-kube-proxy \
@@ -46,6 +47,7 @@ curl -sfL https://get.k3s.io | sh -s - server \
 --token </var/lib/rancher/k3s/server/token> \
 --node-ip $(tailscale ip -4) \
 --node-external-ip <public_ip_otherwise_remove> \
+--advertise-address $(tailscale ip -4) \
 --tls-san=api.axiom.technat.ch \
 --disable=traefik \
 --disable-kube-proxy \
