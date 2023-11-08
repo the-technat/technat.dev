@@ -34,42 +34,12 @@ kubectl apply -f values/initial-pki-issuer.yaml
 
 ## Argo CD
 
+And as a last measurement, deploy Argo CD which will take care of all the other onboarding.
+
 ```
-helm repo add external-secrets https://charts.external-secrets.io
-helm upgrade -i external-secrets external-secrets/external-secrets --create-namespace -n external-secrets
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Secret
-metadata:
-  name: akeyless-secret-creds
-type: Opaque
-stringData:
-  accessId: "p-XXXX"
-  accessType:  api_key
-  accessTypeParam: "access_secret"
-EOF
-cat <<EOF | kubectl apply -f -
-apiVersion: external-secrets.io/v1beta1
-kind: ClusterSecretStore
-metadata:
-  name: akeyless-secret-store
-spec:
-  provider:
-    akeyless:
-      akeylessGWApiURL: "https://api.akeyless.io"
-      authSecretRef:
-        secretRef:
-          accessID:
-            name: akeyless-secret-creds
-            key: accessId
-            namespace: external-secrets
-          accessType:
-            name: akeyless-secret-creds
-            key: accessType
-            namespace: external-secrets
-          accessTypeParam:
-            name: akeyless-secret-creds
-            key: accessTypeParam
-            namespace: external-secrets
-EOF
+helm repo add argo https://argoproj.github.io/argo-helm
+kubectl create namespace argocd
+kubectl label ns argocd axiom.technat.ch/infrastructure="true"
+helm upgrade -i argocd --create-namespace -n argocd argo/argo-cd -f values/initial-argocd-values.yaml
+kubectl apply -f values/initial-app-of-apps.yaml
 ```

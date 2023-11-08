@@ -142,4 +142,5 @@ We have:
 - -1/10000000: regular infra service 
 - 0/1000000: workload
 
+All levels from `-5` to `-1` combined represent the infrastructure of the cluster. So sometimes I call them infrastructure.
 
