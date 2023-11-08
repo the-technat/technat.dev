@@ -1,9 +1,0 @@
----
-argument_specs:
-  main:
-    short_description: The main entry point for the download role.
-    options:
-      k3s_version:
-        type: "str"
-        required: true
-        description: "The k3s version to install"
