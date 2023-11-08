@@ -124,10 +124,9 @@ There are no special concepts/ideas about Ingress/Gateway API implementations. T
 
 ### Operating systems
 
-We only use Linux for our task. Currently the focus is on Ubuntu 22.04, but that could change in the future. We also support ARM nodes, just that they have to be tained with the following tag:
+We only use Linux for our task. Currently the focus is on Ubuntu 22.04, but that could change in the future. We also support ARM nodes, just that they have to be tained with the following:
 
-- `arch.axiom.technat.ch=amd64`
-
+- `kubernetes.io/arch=arm64:NoSchedule`
 
 Since we don't manage Infrastructure declaritively, there's a document that shows how my servers are usually configured before they are joined the cluster.
 
