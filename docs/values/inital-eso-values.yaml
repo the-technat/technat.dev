@@ -1,24 +1,8 @@
-tolerations: 
-- key: "kubernetes.io/arch"
-  operator: "Equal"
-  value: "arm64"
-  effect: "NoSchedule"
-
 priorityClassName: "system-cluster-critical"
 
 webhook:
-  tolerations: 
-  - key: "kubernetes.io/arch"
-    operator: "Equal"
-    value: "arm64"
-    effect: "NoSchedule"
   priorityClassName: "system-cluster-critical"
 
 certController:
-  tolerations: 
-  - key: "kubernetes.io/arch"
-    operator: "Equal"
-    value: "arm64"
-    effect: "NoSchedule"
   priorityClassName: "system-cluster-critical"
 

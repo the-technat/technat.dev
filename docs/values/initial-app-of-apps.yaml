@@ -1,4 +1,5 @@
 ---
+# https://argo-cd.readthedocs.io/en/stable/user-guide/projects/
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:

@@ -40,6 +40,10 @@ The why section said it shall be a central solution. This has to be understood i
 
 Some topics need further discussion.
 
+### Architecture
+
+We use `amd64` and `arm64` nodes mixed. If something doesn't run on `arm64` due to whatever reason, it should use [Node Affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) to control it's placement.
+
 ### Naming
 
 A word about naming: naming is hard and complex, therefore we have stupid names.
@@ -124,9 +128,7 @@ There are no special concepts/ideas about Ingress/Gateway API implementations. T
 
 ### Operating systems
 
-We only use Linux for our task. Currently the focus is on Ubuntu 22.04, but that could change in the future. We also support ARM nodes, just that they have to be tained with the following:
-
-- `kubernetes.io/arch=arm64:NoSchedule`
+We only use Linux for our task. Currently the focus is on Ubuntu 22.04, but that could change in the future. 
 
 Since we don't manage Infrastructure declaritively, there's a document that shows how my servers are usually configured before they are joined the cluster.
 

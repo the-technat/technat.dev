@@ -34,7 +34,7 @@ kubectl apply -f values/initial-pki-issuer.yaml
 
 ## Argo CD
 
-And as a last measurement, deploy Argo CD which will take care of all the other onboarding.
+And as a last thing, deploy Argo CD which will take care of all the other onboardings.
 
 ```
 helm repo add argo https://argoproj.github.io/argo-helm

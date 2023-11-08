@@ -2,24 +2,3 @@ global:
   priorityClassName: "system-cluster-critical"
 
 installCRDs: true
-
-tolerations: 
-- key: "kubernetes.io/arch"
-  operator: "Equal"
-  value: "arm64"
-  effect: "NoSchedule"
-
-
-webhook:
-  tolerations:
-  - key: "kubernetes.io/arch"
-    operator: "Equal"
-    value: "arm64"
-    effect: "NoSchedule"
-
-acmesolver:
-  tolerations: 
-  - key: "kubernetes.io/arch"
-    operator: "Equal"
-    value: "arm64"
-    effect: "NoSchedule"
