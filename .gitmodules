@@ -1,5 +1,0 @@
-[submodule "ansible-tailscale-inventory"]
-	path = ansible/ansible-tailscale-inventory
-	url = https://github.com/m4wh6k/ansible-tailscale-inventory.git
-[submodule "ansible/ansible-tailscale-inventory"]
-	url = https://github.com/m4wh6k/ansible-tailscale-inventory.git
