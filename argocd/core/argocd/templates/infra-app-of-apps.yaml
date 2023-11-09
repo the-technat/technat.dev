@@ -33,7 +33,7 @@ spec:
   template:
     metadata:
       name: '{{ `{{.path.basename}}` }}'
-      labels:
+      annotations:
         argocd.argoproj.io/sync-wave: "-2"
     spec:
       project: "infra"
