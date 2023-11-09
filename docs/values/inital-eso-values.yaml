@@ -1,8 +1,0 @@
-priorityClassName: "system-cluster-critical"
-
-webhook:
-  priorityClassName: "system-cluster-critical"
-
-certController:
-  priorityClassName: "system-cluster-critical"
-

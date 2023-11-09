@@ -33,6 +33,8 @@ spec:
   template:
     metadata:
       name: '{{.path.basename}}'
+      labels:
+        argocd.argoproj.io/sync-wave: "-3"
     spec:
       project: "core"
       source:

@@ -137,9 +137,9 @@ Since we don't manage Infrastructure declaritively, there's a document that show
 The services are categorized into different levels that all represent an Argo CD sync wave and a priority class in K8s.
 
 We have:
-- -5/2000001000: node-critical service
-- -4/2000000000: cluster-critical service
-- -3/1000000000: core service
+- -5/2000001000: node-critical service: only cilium-agent 
+- -4/2000000000: cluster-critical service: only cilium-operator
+- -3/1000000000: core service: cert-manager, eso, argocd, hubble
 - -2/100000000: almost core service 
 - -1/10000000: regular infra service 
 - 0/1000000: workload
