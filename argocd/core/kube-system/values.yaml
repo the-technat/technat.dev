@@ -116,7 +116,7 @@ cilium:
   operator:
     enabled: true
     rollOutPods: true
-    replicas: 2
+    replicas: 1
     priorityClassName: "system-cluster-critical"
     prometheus:
       enabled: true
