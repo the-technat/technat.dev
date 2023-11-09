@@ -1,21 +1,26 @@
-global:
-  priorityClassName: "core"
-  # Set the verbosity of cert-manager. Range of 0 - 6 with 6 being the most verbose.
-  logLevel: 2
+cert-manager-webhook-hetzner:
+  groupName: acme.axiom.technat.ch
+  secretName:
+    - hetzner-dns-token
 
-installCRDs: true
-# When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted
-enableCertificateOwnerRef: true
+  resources: 
+    limits:
+     cpu: 100m
+     memory: 128Mi
+    requests:
+     cpu: 100m
+     memory: 128Mi
 
-resources:
-  requests:
-    cpu: 10m
-    memory: 32Mi
-  limits:
-    cpu: 1
-    memory: 500Mi
+cert-manager:
+  global:
+    priorityClassName: "core"
+    # Set the verbosity of cert-manager. Range of 0 - 6 with 6 being the most verbose.
+    logLevel: 2
 
-webhook:
+  installCRDs: true
+  # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted
+  enableCertificateOwnerRef: true
+
   resources:
     requests:
       cpu: 10m
@@ -24,22 +29,31 @@ webhook:
       cpu: 1
       memory: 500Mi
 
-cainjector:
-  enabled: true
-  resources:
-    requests:
-      cpu: 10m
-      memory: 32Mi
-    limits:
-      cpu: 1
-      memory: 500Mi
+  webhook:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 1
+        memory: 500Mi
 
-startupapicheck:
-  enabled: true
-  resources:
-    requests:
-      cpu: 10m
-      memory: 32Mi
-    limits:
-      cpu: 1
-      memory: 500Mi
+  cainjector:
+    enabled: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 1
+        memory: 500Mi
+
+  startupapicheck:
+    enabled: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 1
+        memory: 500Mi

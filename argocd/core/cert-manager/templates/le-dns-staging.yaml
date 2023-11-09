@@ -7,8 +7,12 @@ spec:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: root@technat.ch
     privateKeySecretRef:
-      name: letsencrypt-staging-account-key
+      name: letsencrypt-staging-dns-account
     solvers:
-    - http01:
-        ingress:
-          ingressClassName: cilium
+      - dns01:
+          webhook:
+            groupName: acme.axiom.technat.ch
+            solverName: hetzner
+            config:
+              secretName: hetzner-dns-token
+              apiUrl: https://dns.hetzner.com/api/v1

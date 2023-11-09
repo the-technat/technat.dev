@@ -72,7 +72,7 @@ For me the negative sides are more than the positive sides and after some inital
 
 ### DNS
 
-We use the dns zone `axiom.technat.ch` for everything related to the cluster (e.g APIs, nodes, infrastructure services...). The zone is of course registered by Infomaniak and maintained in their Public Cloud with Openstack Designate. All records will be public regardless whether they contain a private or public IP.
+We use the dns zone `axiom.technat.ch` for everything related to the cluster (e.g APIs, nodes, infrastructure services...). The zone is of course registered by Infomaniak and maintained in Hetzner DNS. All records will be public regardless whether they contain a private or public IP.
 
 Due to how the zone is hosted, it can be accessed by [external-dns](https://github.com/kubernetes-sigs/external-dns) to automatically set DNS records for us.
 
