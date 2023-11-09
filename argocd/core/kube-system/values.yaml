@@ -1,76 +1,58 @@
-upgradeCompatibility: '1.14'
-k8sServiceHost: "api.axiom.technat.ch"
-k8sServicePort: "6443"
+cilium:
+  upgradeCompatibility: '1.14'
+  k8sServiceHost: "api.axiom.technat.ch"
+  k8sServicePort: "6443"
 
-# -- Roll out cilium agent pods automatically when configmap is updated.
-rollOutCiliumPods: true
+  # -- Roll out cilium agent pods automatically when configmap is updated.
+  rollOutCiliumPods: true
 
-priorityClassName: "system-node-critical"
+  priorityClassName: "system-node-critical"
 
-# -- Security Context for cilium-agent pods.
-podSecurityContext: {}
+  # -- Security Context for cilium-agent pods.
+  podSecurityContext: {}
 
-annotateK8sNode: true
+  annotateK8sNode: true
 
-ingressController:
-  enabled: true
-  default: true
-  loadbalancerMode: shared
-  enforceHttps: true
-  service:
-    labels:
-      svccontroller.k3s.cattle.io/lbpool: internal
-
-gatewayAPI:
-  enabled: true
-
-hostFirewall:
-  enabled: true
-
-hubble:
-  enabled: true
-  metrics:
-      enabled:
-      - dns:query;ignoreAAAA
-      - drop
-      - tcp
-      - flow
-      - icmp
-      - http
-  tls:
+  ingressController:
     enabled: true
-    auto:
+    default: true
+    loadbalancerMode: shared
+    enforceHttps: true
+    service:
+      labels:
+        svccontroller.k3s.cattle.io/lbpool: internal
+
+  gatewayAPI:
+    enabled: true
+
+  hostFirewall:
+    enabled: true
+
+  hubble:
+    enabled: true
+    metrics:
+        enabled:
+        - dns:query;ignoreAAAA
+        - drop
+        - tcp
+        - flow
+        - icmp
+        - http
+    tls:
       enabled: true
-      # We can depend on cert-manager here because this config is only applied when cert-manager is already running
-      method: certmanager
-      certValidityDuration: 30
-      certManagerIssuerRef: 
-        group: cert-manager.io
-        kind: ClusterIssuer
-        name;: akeyless-pki
+      auto:
+        enabled: true
+        # We can depend on cert-manager here because this config is only applied when cert-manager is already running
+        method: certmanager
+        certValidityDuration: 30
+        certManagerIssuerRef: 
+          group: cert-manager.io
+          kind: ClusterIssuer
+          name;: akeyless-pki
 
-  relay:
-    enabled: true
-    rollOutPods: true
-    resources: 
-      limits:
-        cpu: 1000m
-        memory: 1024M
-      requests:
-        cpu: 100m
-        memory: 64Mi
-
-    priorityClassName: "core"
-
-    prometheus:
+    relay:
       enabled: true
-      port: 9966
-
-  ui:
-    enabled: true
-    rollOutPods: true
-    backend:
-      securityContext: {}
+      rollOutPods: true
       resources: 
         limits:
           cpu: 1000m
@@ -79,44 +61,63 @@ hubble:
           cpu: 100m
           memory: 64Mi
 
-    frontend:
-      securityContext: {}
-      resources: 
-        limits:
-          cpu: 1000m
-          memory: 1024M
-        requests:
-          cpu: 100m
-          memory: 64Mi
-    priorityClassName: "core"
+      priorityClassName: "core"
 
-    ingress:
+      prometheus:
+        enabled: true
+        port: 9966
+
+    ui:
       enabled: true
-      annotations: 
-        cert-manager.io/cluster-issuer: le-dns-staging
-      className: "cilium"
-      hosts:
-        - hubble.axiom.technat.ch
-      tls: 
-       - secretName: hubble-ing-tls
-         hosts:
-           - hubble.axiom.technat.ch
+      rollOutPods: true
+      backend:
+        securityContext: {}
+        resources: 
+          limits:
+            cpu: 1000m
+            memory: 1024M
+          requests:
+            cpu: 100m
+            memory: 64Mi
 
-ipam:
-  mode: kubernetes
+      frontend:
+        securityContext: {}
+        resources: 
+          limits:
+            cpu: 1000m
+            memory: 1024M
+          requests:
+            cpu: 100m
+            memory: 64Mi
+      priorityClassName: "core"
 
-policyEnforcementMode: "always"
-policyAuditMode: true
+      ingress:
+        enabled: true
+        annotations: 
+          cert-manager.io/cluster-issuer: le-dns-staging
+        className: "cilium"
+        hosts:
+          - hubble.axiom.technat.ch
+        tls: 
+        - secretName: hubble-ing-tls
+          hosts:
+            - hubble.axiom.technat.ch
 
-prometheus:
-  enabled: true
-  port: 9962
+  ipam:
+    mode: kubernetes
 
-operator:
-  enabled: true
-  rollOutPods: true
-  replicas: 2
-  priorityClassName: "system-cluster-critical"
+  policyEnforcementMode: "always"
+  policyAuditMode: true
+
   prometheus:
     enabled: true
-    port: 9963
+    port: 9962
+
+  operator:
+    enabled: true
+    rollOutPods: true
+    replicas: 2
+    priorityClassName: "system-cluster-critical"
+    prometheus:
+      enabled: true
+      port: 9963
