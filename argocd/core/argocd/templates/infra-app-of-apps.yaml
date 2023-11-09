@@ -29,7 +29,7 @@ spec:
       repoURL: https://github.com/the-technat/axiom.git
       revision: HEAD
       directories:
-      - path: argocd/infrastructure/*
+      - path: argocd/infra/*
   template:
     metadata:
       name: '{{.path.basename}}'
