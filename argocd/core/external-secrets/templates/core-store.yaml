@@ -1,0 +1,26 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: akeyless-core
+spec:
+  provider:
+    akeyless:
+      akeylessGWApiURL: "https://api.akeyless.io"
+      authSecretRef:
+        secretRef:
+          accessID:
+            name: akeyless-core-creds
+            key: accessId
+            namespace: external-secrets
+          accessType:
+            name: akeyless-core-creds
+            key: accessType
+            namespace: external-secrets
+          accessTypeParam:
+            name: akeyless-core-creds
+            key: accessTypeParam
+            namespace: external-secrets
+  conditions:
+  - namespaceSelector:
+      matchLabels:
+        axiom.technat.ch/infrastructure: "true"

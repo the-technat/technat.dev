@@ -6,6 +6,11 @@ This is a doc full of crazy ideas and things not fully ready. It also lists tech
 
 To bring axiom to a first working version that can be used, some technical debts were explicitly created:
 
--  Cilium securityContext configs -> we just left everything on the defaults
+-  securityContext configs -> we just left everything on the defaults for all apps
 - NetworkPolicies -> the hosts and all pods run without policies (or only default policies enabled in a chart)
   - audit mode is on, so policies can be applied one after the other
+
+## Ideas
+
+- Add falco/falcosidekick to monitor node activity
+- Configure dependabot for automatic patching of helm charts

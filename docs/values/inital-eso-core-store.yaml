@@ -1,7 +1,7 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ClusterSecretStore
 metadata:
-  name: akeyless-infrastructure
+  name: akeyless-core
 spec:
   provider:
     akeyless:
@@ -9,15 +9,15 @@ spec:
       authSecretRef:
         secretRef:
           accessID:
-            name: akeyless-infrastructure-creds
+            name: akeyless-core-creds
             key: accessId
             namespace: external-secrets
           accessType:
-            name: akeyless-infrastructure-creds
+            name: akeyless-core-creds
             key: accessType
             namespace: external-secrets
           accessTypeParam:
-            name: akeyless-infrastructure-creds
+            name: akeyless-core-creds
             key: accessTypeParam
             namespace: external-secrets
   conditions:
