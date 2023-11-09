@@ -1,10 +1,16 @@
-# Backup
+# Storage
 
-## Location
+## Network Storage
+
+For Persistent Volumes, I ordered a Hetzner Storage Box that can be accessed via SMB. The creds are saved in akeyless, but no other config was done.
+
+## Backup
+
+### Location
 
 We use Openstack Swift (S3-compat layer) containers for our backups. There's one for the etcd snapshots, and one for persistent volumes.
 
-## Cluster (etcd)
+### Cluster (etcd)
 
 First create an application credential limited to the usage of Swift, then create some ec2 credentails for this app credential and create a swift container.
 
