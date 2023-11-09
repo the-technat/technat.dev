@@ -23,7 +23,7 @@ cilium:
         svccontroller.k3s.cattle.io/lbpool: internal
 
   gatewayAPI:
-    enabled: true
+    enabled: false # something for the future
 
   hostFirewall:
     enabled: true
