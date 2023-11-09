@@ -14,3 +14,4 @@ To bring axiom to a first working version that can be used, some technical debts
 
 - Add falco/falcosidekick to monitor node activity
 - Configure dependabot for automatic patching of helm charts
+- Migrate from Ingress to Gatway API

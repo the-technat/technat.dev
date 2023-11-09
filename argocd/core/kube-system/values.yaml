@@ -48,7 +48,7 @@ cilium:
         certManagerIssuerRef: 
           group: cert-manager.io
           kind: ClusterIssuer
-          name;: akeyless-pki
+          name: akeyless-pki
 
     relay:
       enabled: true
