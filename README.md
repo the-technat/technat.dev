@@ -140,8 +140,8 @@ We have:
 - -5/2000001000: node-critical service: only cilium-agent 
 - -4/2000000000: cluster-critical service: only cilium-operator
 - -3/1000000000: core service: cert-manager, eso, argocd, hubble
-- -2/100000000: almost core service 
-- -1/10000000: regular infra service 
+- -2/100000000: infrastructure service: csi-drivers, monitoring
+<!-- - -1/10000000: regular infra service  -->
 - 0/1000000: workload
 
 All levels from `-5` to `-1` combined represent the infrastructure of the cluster. So sometimes I call them infrastructure.

@@ -93,7 +93,7 @@ hubble:
     ingress:
       enabled: true
       annotations: 
-        cert-manager.io/cluster-issuer: letsencrypt-staging
+        cert-manager.io/cluster-issuer: le-dns-staging
       className: "cilium"
       hosts:
         - hubble.axiom.technat.ch
