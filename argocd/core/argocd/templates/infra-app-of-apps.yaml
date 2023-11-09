@@ -3,7 +3,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: infrastructure
+  name: infra
   namespace: argocd
 spec:
   clusterResourceWhitelist:
@@ -36,7 +36,7 @@ spec:
       labels:
         argocd.argoproj.io/sync-wave: "-2"
     spec:
-      project: "core"
+      project: "infra"
       source:
         repoURL: https://github.com/the-technat/axiom.git
         targetRevision: HEAD
