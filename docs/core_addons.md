@@ -25,7 +25,7 @@ Before you install cert-manager, create an api_key and auth_method. Assign the r
 
 ```
 kubectl create namespace cert-manager 
-kubectl label ns cert-manager axiom.technat.ch/infrastructure="true" 
+kubectl label ns cert-manager axiom.technat.ch/core="true" 
 kubectl create secret generic akeyless-creds --from-literal  secretId=<access_key> --from-literal accessId=<access_id> -n cert-manager
 helm repo add jetstack https://charts.jetstack.io
 helm upgrade -i cert-manager -n cert-manager jetstack/cert-manager --set installCRDs=true
@@ -39,7 +39,7 @@ And as a last thing, deploy Argo CD which will take care of all the other onboar
 ```
 helm repo add argo https://argoproj.github.io/argo-helm
 kubectl create namespace argocd
-kubectl label ns argocd axiom.technat.ch/infrastructure="true"
+kubectl label ns argocd axiom.technat.ch/core="true"
 helm upgrade -i argocd --create-namespace -n argocd argo/argo-cd 
 kubectl apply -f values/initial-app-of-apps.yaml
 ```

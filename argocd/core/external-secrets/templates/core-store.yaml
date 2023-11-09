@@ -23,4 +23,4 @@ spec:
   conditions:
   - namespaceSelector:
       matchLabels:
-        axiom.technat.ch/infrastructure: "true"
+        axiom.technat.ch/core: "true"

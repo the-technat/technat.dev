@@ -1,0 +1,53 @@
+---
+apiVersion: external-secrets.io/v2beta1
+kind: ExternalSecret
+metadata:
+  name: akeyless-infra-creds
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+spec:
+  refreshInterval: 2h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: akeyless-infra-creds
+  target:
+    name: smb-creds
+    creationPolicy: Owner
+    data:
+      accessType: "api_key"
+  data:
+    - secretKey: accessId
+      remoteRef:
+        key: /axiom/core/external-secrets/infra_store_access_id
+    - secretKey: accessTypeParam
+      remoteRef:
+        key: /axiom/core/external-secrets/infra_store_access_key
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: akeyless-infra
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+spec:
+  provider:
+    akeyless:
+      akeylessGWApiURL: "https://api.akeyless.io"
+      authSecretRef:
+        secretRef:
+          accessID:
+            name: akeyless-infra-creds
+            key: accessId
+            namespace: external-secrets
+          accessType:
+            name: akeyless-infra-creds
+            key: accessType
+            namespace: external-secrets
+          accessTypeParam:
+            name: akeyless-infra-creds
+            key: accessTypeParam
+            namespace: external-secrets
+  conditions:
+  - namespaceSelector:
+      matchLabels:
+        axiom.technat.ch/infrastructure: "true"

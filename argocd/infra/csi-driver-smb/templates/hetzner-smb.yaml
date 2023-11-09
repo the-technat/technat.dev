@@ -1,0 +1,18 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: hetzner-smb
+provisioner: smb.csi.k8s.io
+parameters:
+  source: "//u375789.your-storagebox.de/backup"
+  csi.storage.k8s.io/provisioner-secret-name: "smb-creds"
+  csi.storage.k8s.io/provisioner-secret-namespace: "csi-driver-smb"
+  csi.storage.k8s.io/node-stage-secret-name: "smb-creds"
+  csi.storage.k8s.io/node-stage-secret-namespace: "csi-driver-smb"
+reclaimPolicy: Delete 
+volumeBindingMode: Immediate
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=1001
+  - gid=1001
