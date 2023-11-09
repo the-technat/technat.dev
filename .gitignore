@@ -1,3 +1,5 @@
 .vscode
 **.env
 **terraform**
+**Chart.lock**
+**charts**

@@ -32,7 +32,7 @@ spec:
       - path: argocd/infra/*
   template:
     metadata:
-      name: '{{.path.basename}}'
+      name: '{{ `{{.path.basename}}` }}'
       labels:
         argocd.argoproj.io/sync-wave: "-2"
     spec:
@@ -40,10 +40,10 @@ spec:
       source:
         repoURL: https://github.com/the-technat/axiom.git
         targetRevision: HEAD
-        path: '{{.path.path}}'
+        path: '{{ `{{.path.path}}` }}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{.path.basename}}'
+        namespace: '{{ `{{.path.basename}}` }}'
       syncPolicy:
         automated:
           prune: true 
