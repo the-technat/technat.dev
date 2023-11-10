@@ -34,6 +34,9 @@
 		"tag:acl-axiom": [ // the server network
 			"the-technat@github",
 		],
+    "tag:tevbox": [ // tevboxes
+      "the-technat@github",
+    ],
 		"tag:acl-admin": [ // the admin network
 			"the-technat@github",
 		],
@@ -84,6 +87,17 @@
 				"tag:acl-axiom:*",
 			],
 		},
+    // tevbox can acccess server net
+    {
+			"action": "accept",
+			"src": [
+				"tag:tevbox",
+			],
+			"dst": [
+				"tag:acl-axiom:*",
+			],
+		},
+
 	],
 	"ssh": [
 		{
@@ -99,5 +113,18 @@
 				"autogroup:nonroot",
 			],
 		},
+    {
+			// tevbox net can ssh into all axiom nodes with additional checks
+			"action": "check",
+			"src": [
+				"tag:tevbox",
+			],
+			"dst": [
+				"tag:acl-axiom",
+			],
+			"users": [
+				"autogroup:nonroot",
+			],
+		}
 	],
 }
