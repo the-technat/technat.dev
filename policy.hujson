@@ -20,24 +20,18 @@
 		"tag:info-compute-plane": [
 			"the-technat@github",
 		],
-    "tag:info-hetzner": [
+        "tag:info-hetzner": [
 			"the-technat@github",
 		],
-    "tag:info-infomaniak": [
+        "tag:info-infomaniak": [
 			"the-technat@github",
 		],
-    "tag:info-home": [
+        "tag:info-home": [
 			"the-technat@github",
 		],
 
 		// tags that control access
 		"tag:acl-axiom": [ // the server network
-			"the-technat@github",
-		],
-    "tag:acl-tevbox": [ // tevboxes
-      "the-technat@github",
-    ],
-		"tag:acl-admin": [ // the admin network
 			"the-technat@github",
 		],
 	},
@@ -77,11 +71,11 @@
 				"tag:acl-axiom:*",
 			],
 		},
-		// admin net can access server net
+		// me can access server net
 		{
 			"action": "accept",
 			"src": [
-				"tag:acl-admin",
+				"the-technat@github",
 			],
 			"dst": [
 				"tag:acl-axiom:*",
@@ -90,10 +84,10 @@
 	],
 	"ssh": [
 		{
-			// admin net can ssh into all axiom nodes 
-			"action": "accept",
+			// me can ssh into all axiom nodes (check)
+			"action": "check",
 			"src": [
-				"tag:acl-admin",
+				"the-technat@github",
 			],
 			"dst": [
 				"tag:acl-axiom",
