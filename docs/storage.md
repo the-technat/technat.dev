@@ -20,10 +20,11 @@ To backup etcd, the following options have to be added to the `/etc/rancher/k3s/
 
 ```
 etcd-s3: true
-etcd-s3-endpoint: s3.pub1.infomaniak.cloud
+etcd-s3-endpoint: s3.swiss-backup03.infomaniak.com
 etcd-s3-access-key: eerwerwewer
 etcd-s3-secret-key: lrkjweklrjwrj2489
-etcd-s3-bucket: k3s-backups
+etcd-s3-bucket: default
+etcd-s3-folder: k3s
 ```
 
 Then one can do on-demand snapshots like this:
