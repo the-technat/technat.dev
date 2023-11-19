@@ -8,7 +8,7 @@ For Persistent Volumes, I ordered a Hetzner Storage Box that can be accessed via
 
 ### Location
 
-We use Openstack Swift (S3-compat layer) containers for our backups. There's one for the etcd snapshots, and one for persistent volumes.
+We use Infomaniak Swiss Backup (S3-compat layer) for our backups. There's one for the etcd snapshots, and one for persistent volumes.
 
 ### Cluster (etcd)
 
