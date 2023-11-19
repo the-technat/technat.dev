@@ -74,6 +74,7 @@ rules:
       - 'list'
 # Allow infomaniak-webhook ServiceAccount to read its secrets
 ---
+# deploy in the kube-system app
 # Grant the webhook permission to read the ConfigMap containing the Kubernetes
 # apiserver's requestheader-ca-certificate.
 # This ConfigMap is automatically created by the Kubernetes apiserver.
