@@ -1,16 +1,3 @@
-cert-manager-webhook-hetzner:
-  groupName: acme.axiom.technat.ch
-  secretName:
-    - hetzner-dns-token
-
-  resources: 
-    limits:
-     cpu: 100m
-     memory: 128Mi
-    requests:
-     cpu: 100m
-     memory: 128Mi
-
 cert-manager:
   global:
     priorityClassName: "core"
