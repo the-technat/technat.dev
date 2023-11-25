@@ -40,9 +40,9 @@ The why section said it shall be a central solution. This has to be understood i
 
 Some topics need further discussion.
 
-### Architecture
+### CPU Architecture
 
-We use `amd64` and `arm64` nodes mixed. If something doesn't run on `arm64` due to whatever reason, it should use [Node Affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) to control it's placement.
+We use `amd64` and `arm64` nodes mixed without any taints. If something doesn't run on `arm64` due to whatever reason, it should use [Node Affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) to control it's placement.
 
 ### Naming
 
@@ -56,33 +56,31 @@ The workers / agents are nummbered with the prefix `WALL-A` for the big clunky r
 
 ### Automation
 
-It's not necessary to automate this solution and it should be carefully considered before automating a certain part.
+After thinking about automation for a long time, I finally came to the conclusion that automating part of the cluster might be helpful.
 
-Some reasons for it are:
-- reproducable in case of a desaster
-- automatic documentation of what has been done (not necessairly for someone to understand the thing, but for me as a reference)
+So we automate with [Terraform](https://terraform.io) the following stuff:
+- Core Addons
+- External dependencies
 
-Some reasons against it are:
-- takes way more time to automate stuff so that it actually works automated
-- you will always have some manual work you can't automate
-- automating something for only a single environment doesn't really make sense
-- the potential for failures is much higher if you automate stuff
+With [Argo CD](https://argoproj.github.io/cd/) we automate the rest of the app deployments.
 
-For me the negative sides are more than the positive sides and after some inital trials with [Terraform](https://terraform.com) and [Ansible](https://ansible.com) I decided against automating any of the Infrastructure/Cluster side of things. The only thing I will use is GitOps and self-managed components once the cluster is more or less working.
+The underlying infrastructure will probably never be automed, except for that one special day when I finally convinced myself that I should write a Terraform provider for k3s, but no one can say when that day will be...
 
 ### DNS
 
 We use the dns zone `axiom.technat.ch` for everything related to the cluster (e.g APIs, nodes, infrastructure services...). The zone is registered by Infomaniak. All records will be public regardless whether they contain a private or public IP.
 
-Due to how the zone is hosted, it can not be accessed by [external-dns](https://github.com/kubernetes-sigs/external-dns). We thus set DNS entires manually or are using wildcards. 
+Due to how the zone is hosted, it can not be accessed by [external-dns](https://github.com/kubernetes-sigs/external-dns). We thus set DNS entires manually or are using wildcards. An infomaniak plugin for external-dns would be highly appreciated.
 
 Services exposed externally on the cluster may of course use other DNS zones as well, but then without automation (e.g no external-dns).
 
+### Storage
+
+We either use software defined storage or external network-attached storage from one of our main providers.
+
 ### Backup
 
-The storage for all backups shall be an S3 bucket somewhere in Infomaniak.
-
-This means either an Openstack Swift container or Infomaniak Swiss Backup solution.
+The storage for all backups shall be an Infomaniak Swiss Backup s3 client.
 
 ### CNI
 
