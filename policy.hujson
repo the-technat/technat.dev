@@ -31,7 +31,7 @@
 		],
 
 		// tags that control access
-		"tag:acl-axiom": [ // the server network
+		"tag:acl-lan": [ // the server network
 			"the-technat@github",
 		],
 	},
@@ -65,10 +65,10 @@
 		{
 			"action": "accept",
 			"src": [
-				"tag:acl-axiom",
+				"tag:acl-lan",
 			],
 			"dst": [
-				"tag:acl-axiom:*",
+				"tag:acl-lan:*",
 			],
 		},
 		// me can access server net
@@ -78,7 +78,7 @@
 				"the-technat@github",
 			],
 			"dst": [
-				"tag:acl-axiom:*",
+				"tag:acl-lan:*",
 			],
 		},
 	],
@@ -90,7 +90,7 @@
 				"the-technat@github",
 			],
 			"dst": [
-				"tag:acl-axiom",
+				"tag:acl-lan",
 			],
 			"users": [
 				"autogroup:nonroot",
