@@ -14,12 +14,6 @@
 		],
 
 		// tags for informations
-		"tag:info-control-plane": [
-			"the-technat@github",
-		],
-		"tag:info-compute-plane": [
-			"the-technat@github",
-		],
         "tag:info-hetzner": [
 			"the-technat@github",
 		],
@@ -32,6 +26,9 @@
 
 		// tags that control access
 		"tag:acl-lan": [ // the server network
+			"the-technat@github",
+		],
+	        "tag:acl-bastion": [ // the ssh nodes
 			"the-technat@github",
 		],
 	},
@@ -88,6 +85,19 @@
 			"action": "check",
 			"src": [
 				"the-technat@github",
+			],
+			"dst": [
+				"tag:acl-lan",
+			],
+			"users": [
+				"autogroup:nonroot",
+			],
+		},
+{
+			// bastion can ssh into all axiom nodes (accept)
+			"action": "accept",
+			"src": [
+				"tag:acl-bastion",
 			],
 			"dst": [
 				"tag:acl-lan",
