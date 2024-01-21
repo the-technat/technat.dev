@@ -6,12 +6,8 @@ My personal Kubernetes cluster to host all my stuff.
 
 As a computer scientist you tend to solve IT problems with custom solutions. Some might programm their own app, others might search for an app and selfhost it. So do I. I got the following services that are hosted at some providers, sometimes maintained by me and sometimes as a Service:
 
-- cloud.technat.ch: My personal Nextcloud
-- collabora-online.fly.dev: Collabora Online Server used within the Nextcloud to edit rich-text documents
-- vpn.technat.ch: A VPN service to securly browse the web from abroad
 - flasche.alleaffengaffen.ch: The minecraft server of my colleagues (I'm not a gamer, but I can host servers)
-- foto.js-buchsi.ch: [Lychee](https://lycheeorg.github.io/) based photo gallery
-- many more projects to come in the future
+- more projects to come in the future?
 
 Now I realized that they are spread over a dozent of different providers, all requiring some sort of monthly fee for their service. Although most of them have a good prive/value ratio, some apps don't. So the goal of axiom is to create a "centralized" place for all these services, so that we have:
 - one fee
