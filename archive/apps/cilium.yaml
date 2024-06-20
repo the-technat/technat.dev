@@ -1,0 +1,128 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  project: addons
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  source:
+    chart: cilium
+    repoURL: https://helm.cilium.io/
+    targetRevision: 1.12.x
+    helm:
+      version: v3
+      values: |-
+        rollOutCiliumPods: true
+        priorityClassName: "system-node-critical"
+        annotateK8sNode: true
+        policyEnforcementMode: "always"
+        operator:
+          replicas: 1
+          rollOutPods: true
+          prometheus:
+            enabled: true
+            serviceMonitor:
+              enabled: false
+          tolerations:
+          - operator: Exists
+            key: "node-role.kubernetes.io/control-plane"
+            effect: "NoSchedule"
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: Exists
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+        containerRuntime:
+          integration: containerd
+          socketPath: /var/run/containerd/containerd.sock
+        hubble:
+          enabled: true
+          rollOutPods: true
+          relay:
+            enabled: true
+            rollOutPods: true
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 1024M
+              requests:
+                cpu: 100m
+                memory: 64Mi
+          ui:
+            enabled: true
+            rollOutPods: true
+            securityContext:
+              enabled: true
+              runAsUser: 1001
+              runAsGroup: 1001
+              fsGroup: 1001
+            backend:
+              resources:
+                limits:
+                  cpu: 1000m
+                  memory: 1024M
+                requests:
+                  cpu: 100m
+                  memory: 64Mi
+
+            frontend:
+              resources:
+                limits:
+                  cpu: 1000m
+                  memory: 1024M
+                requests:
+                  cpu: 100m
+                  memory: 64Mi
+
+            proxy:
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 256M
+                requests:
+                  cpu: 100m
+                  memory: 24Mi
+        l7Proxy: false # not possible with encryption
+        encryption:
+          enabled: true
+          type: wireguard
+          nodeEncryption: true
+        kubeProxyReplacement: "strict"
+        k8sServiceHost: "api.alleaffengaffen.ch"
+        k8sServicePort: "6443"
+
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+          requests:
+            cpu: 300m
+            memory: 300Mi

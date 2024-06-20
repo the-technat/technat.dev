@@ -1,0 +1,70 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
+spec:
+  project: addons
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  source:
+    chart: external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.12.x
+    helm:
+      version: v3
+      values: |-
+        podSecurityContext:
+          fsGroup: 65534
+
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65534
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+
+        priorityClassName: "infra"
+
+        interval: 1m
+        triggerLoopOnEvent: true
+
+        sources:
+          - service
+          - ingress
+
+        policy: sync
+
+        registry: txt
+        txtOwnerId: "banana"
+
+        provider: hetzner
+
+        env:
+          - name: HETZNER_TOKEN
+            value: "token_here"
+
+        resources:
+          limits:
+            cpu: 200m
+            memory: 100Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi

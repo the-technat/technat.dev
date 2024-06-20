@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+ name: letsencrypt-staging
+spec:
+ acme:
+   server: https://acme-staging-v02.api.letsencrypt.org/directory
+   email: banane@alleaffengaffen.ch
+   privateKeySecretRef:
+     name: letsencrypt-staging
+   solvers:
+    - selector: {}
+      dns01:
+        webhook:
+          groupName: acme.infomaniak.com
+          solverName: infomaniak
+          config:
+            apiTokenSecretRef:
+              name: infomaniak-api-credentials
+              key: api-token

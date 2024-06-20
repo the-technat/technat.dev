@@ -1,0 +1,13 @@
+# ---
+# apiVersion: cilium.io/v2
+# kind: CiliumClusterwideNetworkPolicy
+# metadata:
+#   name: "allow-ingress-controllers-to-backends"
+# spec:
+#   endpointSelector: {} # All pods are rechable by ingress-controller
+#   ingress:
+#     # ports between ingress-nginx and backends could be anything!
+#     - fromEndpoints:
+#         - matchLabels:
+#             app.kubernetes.io/name: contour-private
+#             io.kubernetes.pod.namespace: contour-private

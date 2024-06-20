@@ -1,0 +1,69 @@
+contour:
+  namespaceOverride: "contour-private"
+  extraDeploy: []
+  ## @param configInline [object] Specifies Contour's configuration directly in YAML format
+  ## When configInline is used, Helm manages Contour's configuration ConfigMap as
+  ## part of the release, and existingConfigMap is ignored.
+  ## Refer to https://projectcontour.io/docs/latest/configuration for available options.
+  ##
+  configInline:
+    disablePermitInsecure: false
+    tls:
+      fallback-certificate: {}
+    accesslog-format: envoy
+
+  contour:
+    priorityClassName: "infra"
+    resources:
+      limits:
+        cpu: 750m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+    manageCRDs: true
+    ingressStatusAddress: "contour-private.little-cloud.ts.net"
+    ingressClass:
+      name: "private"
+      create: true
+      default: true
+
+  envoy:
+    kind: deployment
+    priorityClassName: "infra"
+    resources:
+      limits:
+        cpu: 750m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+    shutdownManager:
+      enabled: true
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100Mi
+        requests:
+          cpu: 25m
+          memory: 50Mi
+    service:
+      externalTrafficPolicy: ''
+      clusterIP: 10.111.0.100
+      type: ClusterIP
+
+  defaultBackend:
+    enabled: true
+    image:
+      registry: ghcr.io
+      repository: alleaffengaffen/alleaffengaffen
+      tag: main
+    containerPorts:
+      http: 8080
+    resources:
+       limits:
+         cpu: 250m
+         memory: 256Mi
+       requests:
+         cpu: 10m
+         memory: 10Mi
