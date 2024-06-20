@@ -1,4 +1,4 @@
-# [axiom](https://pixar.fandom.com/wiki/Axiom)
+# technat.dev
 
 My personal Kubernetes cluster to host all my stuff.
 
