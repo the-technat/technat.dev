@@ -1,5 +1,0 @@
-kyverno:
-  priorityClassName: 'infra'
-  extraArgs:
-  - --loggingFormat=text
-  - --backgroundScan=true

@@ -1,7 +1,0 @@
-apiVersion: scheduling.k8s.io/v1
-description: Used for infrastructure applications like csi-drivers, monitoring
-kind: PriorityClass
-metadata:
-  name: infra
-preemptionPolicy: PreemptLowerPriority
-value: 100000000

@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    axiom.technat.ch/core: "true"
-  name: cert-manager
