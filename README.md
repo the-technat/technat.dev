@@ -49,6 +49,10 @@ Nothing is 100% automated, so this list keeps track of steps that have been done
 - mend renovate saas was enabled for the repository
 - generate ssh-key pair and save in hcloud project as default key named `k8s` 
 
+## Open points
+
+- Automate updates with renovate (how to do cluster-spec regeneration if the caph version changes in the capi-components.yaml?)
+
 ## Bootstrap
 
 Docs:
