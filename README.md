@@ -1,24 +1,65 @@
 # technat.dev
 
-## Draft
+Technat's truly unique homelab.
+
+The goal of this homelab is: 
+- to have some fun
+- study and get to learn new stuff
+- figure out how close to 100% automation we can get
+- try to proove that cluster-api is the future for cluster management
+
+The homelab consists of a k8s cluster bootstrapped by Cluster-API. On the cluster we install some basic tooling ready for whatever application we want to try out.
+
+Bootstrap:
+- Github Action provisions an ephemeral kind cluster
+- Infrastructure provider credentials are placed in the kind cluster
+- CAPI Operator and CAPI are installed in the kind cluster using helm
+- YAML defines my cluster
+- CAPI provisions my cluster
+- CAPI installs the CNI and Argo CD
+- CAPI state is moved to the target cluster
+- Target cluster self-registers in Argo CD
+- Argo CD fetches app config from repo
+- Argo CD deploys infrastructure tools
+- kind cluster is destroyed
+- CAPI is self-managing it's cluster
+
+Some points to note:
+- CAPI is the future for cluster management and thus it's worth investing into it
+- Apart from some commands and some CI/CD everything is fully declarative YAML and GitOps
+- Infrastructure and Platform are decoupled, switching Infrastructure provider is normal and intended by CAPI
+- Infrastructure providers for many cloud providers exist, the cheapest one can always be choosen
+- CAPI can bootstrap the cluster using the kubeadm provider (giving me the option to manually deal with the cluster later, if I want to practise for the CKA or CKS)
+
+The tools I'm going to install are:
+- Cilium (the CNI I want to have experience with)
+- Argo CD (my familiar GitOps tool where I contribute)
+- gateway api controller (ingress-nginx or cilium)
+- storage provider (longhorn, rook, minio...)
+- cert-manager
+
+The cluster should be as independent of the underlying cloud as possible.
+
+## Manual Steps
+
+Nothing is 100% automated, so this list keeps track of steps that have been done manually:
+- Create hcloud project
+- Add hcloud api token to repo secrets
+- hcloud project was added to [account-nuker](https://github.com/the-technat/account-nuker)
+- mend renovate saas was enabled for the repository
+- generate ssh-key pair and save in hcloud project as default key named `k8s` 
+
+## Bootstrap
 
 Docs:
 - https://syself.com/docs/caph/getting-started/introduction
 - https://cluster-api.sigs.k8s.io
 
+All the relevant commands can be seen in the github workflow file.
 
-Get your temporary management cluster:
+### Generate cluster spec
 
-```console
-kind create cluster --name caph-mgt-cluster
-helm repo add jetstack https://charts.jetstack.io --force-update
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set crds.enabled=true
-helm repo add capi-operator https://kubernetes-sigs.github.io/cluster-api-operator
-helm install capi-operator capi-operator/cluster-api-operator --create-namespace -n capi-operator-system
-kubectl apply -f capi-components.yaml
-```
-
-Generate a cluster spec:
+The cluster-spec that's checked into the repo, has been generated using the following commands:
 
 ```console
 export SSH_KEY_NAME="k8s"
@@ -29,8 +70,11 @@ export CONTROL_PLANE_MACHINE_COUNT=3
 export WORKER_MACHINE_COUNT=1
 export KUBERNETES_VERSION=v1.31.0
 clusterctl generate cluster technat.dev -i=hetzner:v1.0.0-beta.43 > cluster.yaml
-kubectl apply -f cluster.yaml
 ```
+
+If you update the CAPH provider, it's recommended to regenerate these specs.
+
+### Continue
 
 And finally access the workload cluster:
 
